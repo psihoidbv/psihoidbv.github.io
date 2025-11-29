@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Psihologie – Întrebări & Răspunsuri (cu filtru)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown.min.css" />
+  <style>
+    :root { --primary: #2563eb; --gray: #f3f4f6; --dark: #1f2937; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #f9fafb;
+      color: #333;
+      margin: 0;
+      line-height: 1.6;
+    }
+    header {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 2.5rem 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 { margin: 0; font-size: 2.4rem; }
+    .subtitle { opacity: 0.9; margin-top: 0.5rem; }
+
+    .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+
+    .filters {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+    }
+    .tag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 0.8rem;
+    }
+    .tag-label {
+      display: flex;
+      align-items: center;
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 0.4rem 0;
+    }
+    .tag-checkbox {
+      margin-right: 0.7rem;
+      accent-color: var(--primary);
+      transform: scale(1.15);
+    }
+    .clear-filters {
+      margin-top: 1rem;
+      padding: 0.7rem 1.4rem;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .clear-filters:hover { background: #dc2626; }
+
+    .stats {
+      text-align: center;
+      padding: 1rem;
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .question-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+    .question-card.hidden { display: none; }
+    .question-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.15); }
+
+    .theorist {
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .question {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 1.2rem 0;
+      color: var(--dark);
+    }
+    .answer {
+      margin-top: 1.5rem;
+    }
+    .markdown-body {
+      background: transparent;
+      padding: 0;
+    }
+    .tags-list {
+      margin-top: 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tag {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 0.4rem 0.9rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 4rem;
+    }
+    @media (max-width: 768px) {
+      .tag-grid { grid-template-columns: 1fr; }
+      .question-card { padding: 1.5rem; }
+    }
+	
+	.filters-header {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  user-select: none;
+  color: var(--dark);
+}
+
+.filters-toggle {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: normal;
+}
+
+.filters-content {
+  transition: all 0.3s ease;
+  overflow: hidden;
+  max-height: 1000px; /* suficient de mare când e deschis */
+}
+
+.filters-content.collapsed {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  border: none;
+}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Psihologia personalității – Întrebări și Răspunsuri</h1>
+  <!--<p class="subtitle">Răspunsuri în format Markdown frumos formatat • Filtrare multiplă pe taguri</p>-->
+</header>
+
+<div class="container">
+
+  <!--<div class="filters">
+    <div style="font-weight:600;margin-bottom:1rem;color:var(--dark)">Filtrează după taguri (poți bifa mai multe):</div>
+    <div class="tag-grid">
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="1. Sistemul / structura personalității" onchange="filterQuestions()">
+          <span>1. Sistemul / structura personalității</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="10. Concepte originale specifice fiecărei teorii" onchange="filterQuestions()">
+          <span>10. Concepte originale specifice fiecărei teorii</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="2. Motivația umană" onchange="filterQuestions()">
+          <span>2. Motivația umană</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="3. Tipuri de personalitate / Tipologie" onchange="filterQuestions()">
+          <span>3. Tipuri de personalitate / Tipologie</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="4. Dezvoltarea personalității (ontogeneză)" onchange="filterQuestions()">
+          <span>4. Dezvoltarea personalității (ontogeneză)</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="5. Personalitatea matură" onchange="filterQuestions()">
+          <span>5. Personalitatea matură</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="6. Viziunea despre natura umană" onchange="filterQuestions()">
+          <span>6. Viziunea despre natura umană</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="7. Raportul ereditate–mediu" onchange="filterQuestions()">
+          <span>7. Raportul ereditate–mediu</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="8. Rolul educației" onchange="filterQuestions()">
+          <span>8. Rolul educației</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="9. Diferențe / asemănări între teorii" onchange="filterQuestions()">
+          <span>9. Diferențe / asemănări între teorii</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="Adler" onchange="filterQuestions()">
+          <span>Adler</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="Allport" onchange="filterQuestions()">
+          <span>Allport</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="Cattell" onchange="filterQuestions()">
+          <span>Cattell</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="Freud" onchange="filterQuestions()">
+          <span>Freud</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="Fromm" onchange="filterQuestions()">
+          <span>Fromm</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="Horney" onchange="filterQuestions()">
+          <span>Horney</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="Jung" onchange="filterQuestions()">
+          <span>Jung</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="Murray" onchange="filterQuestions()">
+          <span>Murray</span>
+        </label>
+      
+        <label class="tag-label">
+          <input type="checkbox" class="tag-checkbox" value="no-tag" onchange="filterQuestions()">
+          <span>no-tag</span>
+        </label>
+      
+    </div>
+    <button class="clear-filters" onclick="clearFilters()">Șterge toate filtrele</button>
+  </div>-->
+  
+  <div class="filters">
+	  <div class="filters-header" onclick="toggleFilters()">
+		<span class="filters-title">Filtrează după taguri (poți bifa mai multe)</span>
+		<span class="filters-toggle">− Ascunde</span>
+	  </div>
+	  <div class="filters-content" id="filters-content">
+		<div class="tag-grid">
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="1. Sistemul / structura personalității" onchange="filter()">
+			  <span>1. Sistemul / structura personalității</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="10. Concepte originale specifice fiecărei teorii" onchange="filter()">
+			  <span>10. Concepte originale specifice fiecărei teorii</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="2. Motivația umană" onchange="filter()">
+			  <span>2. Motivația umană</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="3. Tipuri de personalitate / Tipologie" onchange="filter()">
+			  <span>3. Tipuri de personalitate / Tipologie</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="4. Dezvoltarea personalității (ontogeneză)" onchange="filter()">
+			  <span>4. Dezvoltarea personalității (ontogeneză)</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="5. Personalitatea matură" onchange="filter()">
+			  <span>5. Personalitatea matură</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="6. Viziunea despre natura umană" onchange="filter()">
+			  <span>6. Viziunea despre natura umană</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="7. Raportul ereditate–mediu" onchange="filter()">
+			  <span>7. Raportul ereditate–mediu</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="8. Rolul educației" onchange="filter()">
+			  <span>8. Rolul educației</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="9. Diferențe / asemănări între teorii" onchange="filter()">
+			  <span>9. Diferențe / asemănări între teorii</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="Adler" onchange="filter()">
+			  <span>Adler</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="Allport" onchange="filter()">
+			  <span>Allport</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="Cattell" onchange="filter()">
+			  <span>Cattell</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="Freud" onchange="filter()">
+			  <span>Freud</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="Fromm" onchange="filter()">
+			  <span>Fromm</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="Horney" onchange="filter()">
+			  <span>Horney</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="Jung" onchange="filter()">
+			  <span>Jung</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="Murray" onchange="filter()">
+			  <span>Murray</span>
+			</label>
+		  
+			<label class="tag-label">
+			  <input type="checkbox" class="tag-checkbox" value="no-tag" onchange="filter()">
+			  <span>no-tag</span>
+			</label>
+		  
+		</div>
+		<button class="clear-filters" onclick="clearFilters()">Șterge toate filtrele</button>
+	  </div>
+	</div>
+
+  <div class="stats">
+    Total întrebări: <strong>79</strong> | 
+    Se afișează: <strong id="visible-count">79</strong>
+  </div>
+
+  <div id="questions-container">
+    
+      <div class="question-card" data-tags="2. Motivația umană|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">1. În ce mod determină pulsiunile (instinctele) vieţii şi ale morţii comportamentul uman? Identificaţi asemănările şi diferenţele dintre cele două categorii de pulsiuni, în acest sens.</div>
+        <div class="answer markdown-body">
+          <p>Instinctul sau impulsul este reprezentarea mintală a stimulilor de origine corporală (internă) și constituie <strong>forța propulsivă a personalității</strong>, care energizează și direcționează comportamentul. Scopul oricărui instinct este <strong>reducerea tensiunii</strong> prin satisfacerea trebuinței și restabilirea echilibrului (o abordare homeostatică).</p>
+<p>Pulsiunile vieții și ale morții determină comportamentul prin intermediul acestui mecanism de generare și reducere a tensiunii, fiind esența forțelor care guvernează Sinele.</p>
+<p><strong>Asemănări:</strong></p>
+<ol>
+<li>Ambele categorii reprezintă forțe propulsive de <strong>natură biologică</strong> ale personalității.</li>
+<li>Ambele se manifestă activ sub forma unor trebuințe, având ca scop menținerea echilibrului fiziologic și psihologic.</li>
+<li>Ambele sunt considerate ca fiind general-umane.</li>
+</ol>
+<p><strong>Diferențe:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Categorie de Pulsiuni</th>
+<th align="left">Energia psihică asociată</th>
+<th align="left">Scop și Orientare</th>
+<th align="left">Manifestare principală</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Instinctele Vieții (Eros)</strong></td>
+<td align="left"><strong>Libido</strong></td>
+<td align="left">Servesc <strong>supraviețuirea</strong> speciei și a individului, fiind orientate spre <strong>creștere și dezvoltare</strong>.</td>
+<td align="left">Instinctul sexual (în sens larg).</td>
+</tr>
+<tr>
+<td align="left"><strong>Instinctele Morții (Thanatos)</strong></td>
+<td align="left">Nu este specificată o energie psihică dedicată</td>
+<td align="left">Reprezintă dorința inconștientă de a muri și distrugere.</td>
+<td align="left">Impulsul agresiv, care poate fi orientat spre exterior sau interior.</td>
+</tr>
+</tbody></table>
+<p>Instinctele Morții (Thanatos) nu au fost studiate la fel de amănunțit de Freud ca Instinctele Vieții (Eros), deoarece se considera că ele operează în interiorul ființei umane în mod &quot;tăcut&quot;.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">2. Motivația umană</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="2. Motivația umană|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">2. Care este tendinţa generală a motivaţiei umane?</div>
+        <div class="answer markdown-body">
+          <p>Tendința generală a motivației umane, conform lui Freud, este <strong>reducerea tensiunii</strong>.</p>
+<p>Viața psihică este concepută ca un <strong>ciclu perpetuu de acțiuni de reducere a tensiunilor</strong> generate de trebuințele corporale, în scopul restabilirii echilibrului (o abordare homeostatică). Sinele, rezervorul pulsiunilor, împinge ființa umană spre obținerea satisfacției și evitarea neplăcerii, funcționând după <strong>Principiul plăcerii</strong>.</p>
+<p>Scopul unic, ultim și necesar al vieții este reducerea tensiunii, iar în această luptă, Sinele este considerat victorios, ceea ce menține tensiunea și conflictul permanent prezente în psihic.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">2. Motivația umană</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="1. Sistemul / structura personalității|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">3. Argumentaţi natura relaţiilor dintre sine, eu şi supraeu.</div>
+        <div class="answer markdown-body">
+          <p>Sinele, Eul și Supraeul sunt cele trei componente structurale ale personalității. Relațiile dintre ele sunt, prin natura lor, <strong>conflictuale</strong>, Eul având rolul de instanță mediatoare.</p>
+<ul>
+<li><strong>Sinele (Id):</strong> Este rezervorul pulsiunilor și singura sursă energetică a psihicului (Libidoul). Este o structură primitivă, în întregime inconștientă, ghidată de <strong>Principiul plăcerii</strong>, cerând satisfacție imediată și necondiționată.</li>
+<li><strong>Eul (Ego):</strong> Se dezvoltă din Sine prin interacțiunea cu mediul extern și este o structură preponderent conștientă, considerată &quot;stăpânul rațional&quot; al personalității. Eul se subordonează <strong>Principiului realității</strong> și are rolul de a orienta comportamentul pentru a satisface pulsiunile Sinelui în funcție de condițiile reale, găsind modalități acceptabile social.</li>
+<li><strong>Supraeul (Superego):</strong> Este ultima structură formată, instanța morală internalizată (conștiința morală). Se formează prin <strong>introiecția</strong> legilor și interdicțiilor morale ale societății. Funcționează după <strong>Imperativul moral</strong>, urmărind perfecțiunea morală.</li>
+</ul>
+<p><strong>Relațiile conflictuale:</strong> Eul acționează ca o instanță mediatoare între impulsurile Sinelui, limitările realității obiective (mediul fizic și social) și restricțiile de natură morală impuse de Supraeu. Eul este prins &quot;la mijloc&quot;, amenințat de aceste trei instanțe diferite.</p>
+<p>Rezultatul inevitabil al acestei lupte permanente, atunci când Eul este presat excesiv, este dezvoltarea anxietății.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">1. Sistemul / structura personalității</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="Freud|no-tag">
+        <div class="theorist">Freud</div>
+        <div class="question">4. Ce mecanisme de apărare ale eului asigură reducerea anxietăţii şi menţinerea echilibrului psihic?</div>
+        <div class="answer markdown-body">
+          <p>Anxietatea este o stare bazală, inerentă naturii umane, care, dacă depășește o anumită intensitate, stă la originea nevrozelor.</p>
+<p>Pentru a reduce anxietatea (obiectivă, nevrotică și morală) și a menține echilibrul psihic, Eul utilizează mecanisme de apărare, care pot fi clasificate în <strong>raționale</strong> și <strong>iraționale</strong>.</p>
+<p><strong>Modalități raționale de reducere a anxietății (mediate de procese de conștientizare):</strong></p>
+<ul>
+<li><strong>Evitarea</strong> situației amenințătoare.</li>
+<li><strong>Inhibarea</strong> impulsului.</li>
+<li><strong>Supunerea</strong> la imperativele morale.</li>
+</ul>
+<p><strong>Modalități iraționale (Mecanisme de apărare ale Eului):</strong>
+Acestea sunt forme de negare sau de <strong>distorsionare a realității</strong>. Ele funcționează inconștient, împingând conținuturile amenințătoare în afara câmpului conștiinței și menținându-le acolo, pentru a fi eficiente.
+Cele mai importante mecanisme iraționale sunt:</p>
+<ul>
+<li><strong>Represia</strong>.</li>
+<li><strong>Refularea</strong>.</li>
+<li><strong>Reacția</strong>.</li>
+<li><strong>Regresia</strong>.</li>
+<li><strong>Proiecția</strong>.</li>
+<li><strong>Raționalizarea</strong>.</li>
+<li><strong>Deplasarea</strong>.</li>
+<li><strong>Sublimarea</strong> (o modificare a impulsului sexual, deviindu-l spre activități nesexuale, socialmente acceptabile, cum ar fi activitatea creatoare artistică sau intelectuală).</li>
+</ul>
+<p>Mecanismele de apărare sunt <strong>vitale</strong> pentru echilibrul personalității.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">Freud</span><span class="tag">no-tag</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">5. Care sunt criteriile de stadializare utilizate de Freud, care sunt stadiile delimitate prin ele şi caracteristicile lor?</div>
+        <div class="answer markdown-body">
+          <p><strong>Criteriul de stadializare</strong> utilizat de Freud este <strong>dezvoltarea psihosexuală</strong>. Această stadializare se bazează pe <strong>localizarea pulsiunilor libidinale</strong> (centrul conflictului) în diferite zone erogene ale corpului, care au o importanță dominantă în funcție de vârstă.</p>
+<p><strong>Stadiile delimitate și caracteristicile lor:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Stadiul</th>
+<th align="left">Perioada de Vârstă</th>
+<th align="left">Zona Erogenă Dominantă</th>
+<th align="left">Conflictul Specific și Caracteristici</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Oral</strong></td>
+<td align="left">0–2 ani</td>
+<td align="left">Gura</td>
+<td align="left">Plăcerea derivată din supt, mușcat, înghițit. Copilul este în dependență absolută față de mamă (obiect al Libidoului).</td>
+</tr>
+<tr>
+<td align="left"><strong>Anal</strong></td>
+<td align="left">1–3 ani</td>
+<td align="left">Anusul</td>
+<td align="left">Conflictul legat de controlul sfincterelor (dresajul la oliță). Satisfacerea imediată a impulsului instinctual este împiedicată de cerințele părinților, marcând o perioadă de traume și conflicte.</td>
+</tr>
+<tr>
+<td align="left"><strong>Falic</strong></td>
+<td align="left">3–5 ani</td>
+<td align="left">Organele genitale</td>
+<td align="left"><strong>Complexul Oedip</strong> (băieți) sau <strong>Complexul Electra</strong> (fete). Implică dorința imaginară de a poseda părintele de sex opus și rivalitatea față de cel de același sex. Rezolvarea acestui conflict este crucială pentru structura de personalitate adultă.</td>
+</tr>
+<tr>
+<td align="left"><strong>De latență</strong></td>
+<td align="left">6–11 ani</td>
+<td align="left">Nicio zonă specifică</td>
+<td align="left">Nu este un stadiu psihosexual propriu-zis. Energia Libidinală este canalizată și sublimată în activități școlare, sport, hobby. Structurile de personalitate (Sine, Eu, Supraeu) sunt formate.</td>
+</tr>
+<tr>
+<td align="left"><strong>Genital</strong></td>
+<td align="left">Adolescență</td>
+<td align="left">Organele genitale</td>
+<td align="left">Maturizarea sexuală. Energia sexuală este exprimată prin substitute socialmente acceptabile, culminând, la vârsta adultă, cu satisfacerea instinctului sexual printr-o relație profundă cu o persoană de sex opus.</td>
+</tr>
+</tbody></table>
+<p>Primele cinci ani de viață (stadiile oral, anal și falic) sunt considerate <strong>definitorii pentru structura de personalitate</strong>, nevrozele adultului avându-și rădăcina în prima copilărie.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|4. Dezvoltarea personalității (ontogeneză)|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">6. Argumentaţi relaţia dintre conflictele stadiilor de dezvoltare şi tipurile de personalitate.</div>
+        <div class="answer markdown-body">
+          <p>Relația dintre conflictele stadiilor psihosexuale și tipurile de personalitate la vârsta adultă este una de <strong>determinism cauzal</strong>.</p>
+<p>Dacă rezolvarea conflictului specific unui stadiu (oral, anal sau falic) se face într-o manieră nesatisfăcătoare sau incompletă, se produce o <strong>fixație libidinală</strong> pe acel stadiu imatur. Această fixație înseamnă că o parte din energia psihică rămâne investită în modalități de satisfacere asociate zonei erogene dominante a stadiului respectiv.</p>
+<p>Ca urmare a fixației:</p>
+<ol>
+<li><strong>Personalitatea imatură (nevrotică)</strong> la vârsta adultă rămâne legată de acele modalități infantile de satisfacere a pulsiunilor.</li>
+<li>Individul va recurge preponderent la <strong>mecanisme de apărare iraționale</strong> specifice acelui stadiu pentru a reduce anxietatea.</li>
+</ol>
+<p>De exemplu, rezolvarea incompletă a conflictului din stadiul falic (Complexul Oedip/Electra) duce la conturarea unui <strong>tip de personalitate falic</strong>, manifestat prin narcisism și dificultăți în stabilirea unor relații heterosexuale mature. Astfel, tipologia personalității adulte (oral, anal, falic) este direct determinată de modul în care au fost gestionate conflictele psihosexuale din prima copilărie.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">7. Care sunt criteriile utilizate de Freud pentru a descrie şi explica tipurile de personalitate la vârsta adultă?</div>
+        <div class="answer markdown-body">
+          <p>Criteriile utilizate de Freud pentru descrierea și explicarea tipurilor de personalitate la vârsta adultă sunt:</p>
+<ol>
+<li><strong>Modul de rezolvare a conflictelor psihosexuale din copilărie:</strong> Tipul de personalitate este determinat de prezența sau absența <strong>fixațiilor libidinale</strong> pe stadiile imature (oral, anal, falic).</li>
+<li><strong>Mecanismele de apărare predilecte:</strong> Tipurile nevrotice (imature) sunt caracterizate prin prevalența utilizării <strong>mecanismelor iraționale</strong> de reducere a anxietății. În schimb, tipul matur (genital) utilizează mecanisme raționale, precum <strong>sublimarea</strong>.</li>
+<li><strong>Investirea energiei libidinale:</strong> Tipurile imature rămân legate de modalitățile de satisfacere asociate unui stadiu specific în care s-a produs fixația.</li>
+<li><strong>Funcționarea generală la vârsta adultă:</strong> Tipul matur (genital) este definit de capacitatea de a găsi satisfacție în muncă și în dragoste.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|5. Personalitatea matură|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">8. Marcaţi asemănările şi diferenţele între personalitatea matură şi tipurile de personalitate imature.</div>
+        <div class="answer markdown-body">
+          <p>Freud distinge între personalitatea matură (Tipul genital) și tipurile de personalitate imature (nevrotice: oral, anal, falic).</p>
+<p><strong>Asemănări:</strong></p>
+<ul>
+<li>Ambele tipuri sunt supuse forțelor instinctuale generale (Libido și Thanatos).</li>
+<li>Ambele categorii se confruntă cu anxietatea, care este inerentă funcționării psihice.</li>
+</ul>
+<p><strong>Diferențe:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Caracteristică</th>
+<th align="left">Personalitatea Matură (Tipul Genital)</th>
+<th align="left">Tipurile de Personalitate Imature (Oral, Anal, Falic)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Dezvoltare/Fixație</strong></td>
+<td align="left">Rezolvarea satisfăcătoare a conflictelor din stadiile infantile (fără fixații libidinale).</td>
+<td align="left">Fixație libidinală pe unul dintre stadiile imature (eșec al maturizării).</td>
+</tr>
+<tr>
+<td align="left"><strong>Reducerea Anxietății</strong></td>
+<td align="left">Utilizează <strong>mecanisme raționale</strong> de apărare. Mecanismul predilect este sublimarea.</td>
+<td align="left">Utilizează preponderent <strong>mecanisme de apărare iraționale</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Funcționare Adultă</strong></td>
+<td align="left">Funcționare plenară în societate. Găsește satisfacție în <strong>muncă și în dragoste</strong> (relații heterosexuale mature).</td>
+<td align="left">Manifestă patternuri de satisfacere asociate stadiului fixat, cum ar fi narcisismul sau dificultatea de a stabili relații mature (tipul falic).</td>
+</tr>
+<tr>
+<td align="left"><strong>Atribute</strong></td>
+<td align="left">Absența apărărilor iraționale ale Eului.</td>
+<td align="left">Păstrarea unor patternuri de relaționare defectuoase.</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">5. Personalitatea matură</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="6. Viziunea despre natura umană|7. Raportul ereditate–mediu|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">9. Evaluaţi viziunea lui Freud despre natura umană şi argumentaţi orientarea sa. Încadraţi teoria în funcţie de concepţia sa asupra raportului ereditate–mediu.</div>
+        <div class="answer markdown-body">
+          <p><strong>Evaluarea și Orientarea Viziunii despre Natura Umană:</strong></p>
+<p>Viziunea lui Freud despre natura umană este <strong>pesimistă și sumbră</strong>. Omul este văzut ca o ființă prizonieră a <strong>instinctelor</strong> (forțe oarbe, animalice), iar acțiunile sale sunt dictate de acestea.</p>
+<p>Orientarea teoriei este un <strong>determinism rigid</strong>, chiar fatalist. Freud susținea că tot ceea ce facem și gândim (inclusiv ceea ce visăm) este determinat de forțele inaccesibile din Sine. Din această perspectivă, <strong>liberul arbitru este considerat o iluzie</strong> pe care ne-o facem pentru a ne simți confortabil, o raționalizare. Gândirea și rațiunea sunt descrise ca fiind &quot;sclavi umili&quot; ai Sinelui și ai impulsurilor noastre primare.</p>
+<p>Modelul de personalitate propus este unul <strong>conflictual</strong> (conflict psihosocial), unde pulsiunile Sinelui, ghidate de principiul plăcerii, intră în contradicție cu limitările realității obiective și cu normele Supraeului.</p>
+<p><strong>Încadrarea în raportul Ereditate–Mediu:</strong></p>
+<p>Teoria lui Freud se încadrează în <strong>determinismul biologic</strong>.</p>
+<ul>
+<li><strong>Ereditatea (Biologicul):</strong> Este răspunzătoare de <strong>structurile de bază</strong> (fiziologice) și de <strong>succesiunea stadiilor</strong> dezvoltării psihosexuale. Aceste structuri sunt general umane, toți oamenii fiind mânați de aceleași forțe.</li>
+<li><strong>Mediul (Socialul/Cultura):</strong> Determină <strong>conținuturile Eului și Supraeului</strong>. Deși Eul și Supraeul îndeplinesc aceeași funcție la toți oamenii, ele se formează prin experiență (socializare/educație) în maniere diverse.</li>
+</ul>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">6. Viziunea despre natura umană</span><span class="tag">7. Raportul ereditate–mediu</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="8. Rolul educației|Freud">
+        <div class="theorist">Freud</div>
+        <div class="question">10. Care este locul şi rolul educaţiei în această viziune?</div>
+        <div class="answer markdown-body">
+          <p>În viziunea lui Freud, educația, ca influență socială formativă, joacă un rol esențial, deși unul restrictiv, în modelarea personalității.</p>
+<p><strong>Rolul și scopul educației:</strong></p>
+<ol>
+<li><strong>Temperarea instinctelor:</strong> Rolul educației este de a <strong>tempera instinctele animalice ale omului</strong> și de a permite funcționarea lui socială.</li>
+<li><strong>Formarea Supraeului:</strong> Educația (socializarea) stă la baza genezei Supraeului. Supraeul se formează prin <strong>introiecția</strong> (internalizarea) legilor și interdicțiilor morale pe care societatea le impune individului.</li>
+<li><strong>Controlul social:</strong> Supraeu are rolul de a constitui o <strong>instanță internă care controlează comportamentul social al omului</strong>, asigurând conformitatea cu legile morale în absența controlului extern.</li>
+<li><strong>Modelarea Eului:</strong> Cultura (prin educație) determină conținuturile Eului, care, deși servește Sinele, trebuie să opereze după principiul realității.</li>
+</ol>
+<p>În esență, rostul educației este acela de a &quot;dresa&quot; natura animalică a omului, permițându-i integrarea în societate.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">8. Rolul educației</span><span class="tag">Freud</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="1. Sistemul / structura personalității|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">1. În ce constă sistemul de personalitate la Jung?</div>
+        <div class="answer markdown-body">
+          <p>Sistemul de personalitate (numit de Jung <strong>Psyché</strong>) este conceput ca un sistem de structuri interdependente care funcționează pe baza energiei psihice.</p>
+<p><strong>Elementele structurale majore ale personalității sunt:</strong></p>
+<ol>
+<li><strong>Eul (Ego):</strong> Partea <strong>conștientului</strong> responsabilă cu percepția, gândirea și emoțiile. Eul realizează funcția realului, asigurând <strong>coerența și identitatea conștiinței</strong>.</li>
+<li><strong>Inconștientul Individual:</strong> Porțiunea superficială a inconștientului, care servește ca <strong>rezervor al conținuturilor ce au fost odată conștiente</strong> (uitate sau suprimate). Aceste conținuturi se grupează în <strong>complexe</strong>.</li>
+<li><strong>Inconștientul Colectiv:</strong> Nivelul profund și inaccesibil al psihismului. Acesta conține <strong>tezaurul de experiențe al speciei umane</strong> (experiențele ancestrale) și se manifestă prin <strong>arhetipuri</strong>.</li>
+</ol>
+<p><strong>Energia și principiile funcționării:</strong></p>
+<ul>
+<li><strong>Libido-ul</strong> este <strong>energia vitală nediferențiată</strong> care alimentează <em>psyché-ul</em> și nu este neapărat de origine sexuală.</li>
+<li>Funcționarea psihicului se bazează pe trei principii, prin analogie cu legile fizicii: <strong>principiul contrariilor</strong> (totul este un joc al contrariilor, tensiunea fiind sursa energiei), <strong>principiul echivalenței</strong> (energia psihică se transformă, dar nu se pierde) și <strong>principiul entropiei</strong> (dacă două forțe sunt inegale, energia migrează de la cea puternică la cea slabă, căutând echilibrul).</li>
+</ul>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">1. Sistemul / structura personalității</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="10. Concepte originale specifice fiecărei teorii|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">2. Care este rolul celor două instanţe inconştiente în funcţionarea personalităţii?</div>
+        <div class="answer markdown-body">
+          <p>Cele două instanțe inconștiente (inconștientul individual și inconștientul colectiv) joacă roluri distincte în funcționarea și modelarea personalității:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Instanța Inconștientă</th>
+<th align="left">Rolul Principal în Funcționare</th>
+<th align="left">Conținuturi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Inconștientul Individual</strong></td>
+<td align="left">Este un rezervor pentru conținuturi care au fost conștiente, dar au fost uitate sau suprimate (fie pentru că erau banale, fie pentru că erau periculoase). Între Eu și inconștientul individual există o circulație în ambele sensuri.</td>
+<td align="left"><strong>Complexele</strong> (nuclee de emoții, amintiri, percepții și dorințe grupate în jurul unei teme). Complexele au un <strong>rol motivațional</strong> și pot fi sursa nevrozelor.</td>
+</tr>
+<tr>
+<td align="left"><strong>Inconștientul Colectiv</strong></td>
+<td align="left">Asigură legătura individului cu umanitatea și celelalte specii, transmițând <strong>experiențele ancestrale</strong> (un tezaur de experiențe al speciei umane). Exercită un control general asupra personalității.</td>
+<td align="left"><strong>Arhetipurile</strong> (imagini sau patternuri înnăscute de organizare a experienței), precum figura mamei, eroul, sau Sinele.</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">10. Concepte originale specifice fiecărei teorii</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="Jung|no-tag">
+        <div class="theorist">Jung</div>
+        <div class="question">3. În ce constau diferenţele de concepţie asupra eului şi sinelui în teoria lui Jung, comparativ cu psihanaliza clasică?</div>
+        <div class="answer markdown-body">
+          <p>Concepțiile lui Jung despre Eu și Sine sunt fundamental diferite față de cele ale lui Freud:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Conceptul</th>
+<th align="left">Psihologia Analitică (Jung)</th>
+<th align="left">Psihanaliza Clasică (Freud)</th>
+<th align="left">Diferențe Cheie</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Eul (Ego)</strong></td>
+<td align="left">Este o <strong>instanță independentă a personalității</strong>. Este partea <strong>conștientă</strong> responsabilă cu percepția, gândirea și emoțiile. Are rolul de a menține <strong>identitatea de sine</strong> și coerența.</td>
+<td align="left">Este o structură dezvoltată din Sine, preponderent conștientă, dar acționează ca <strong>stăpân rațional/mediator</strong>, fiind totodată <strong>servitorul Sinelui (Id)</strong>.</td>
+<td align="left">Eul lui Jung este mai <strong>autonom</strong> și nu este considerat doar un servitor al instinctelor.</td>
+</tr>
+<tr>
+<td align="left"><strong>Sinele (Self)</strong></td>
+<td align="left">Este <strong>cel mai important arhetip</strong>, reprezentând <strong>unitatea și integralitatea personalității totale</strong>. Este un <strong>țel spre care tindem</strong>, care se constituie abia la <strong>vârsta mijlocie</strong>. Este o <strong>forță motivațională care trage înainte</strong> (orientare teleologică).</td>
+<td align="left">Este cea mai veche structură, prezentă de la naștere, în întregime <strong>inconștientă</strong>. Este <strong>rezervorul pulsiunilor</strong> (instinctelor) și unica sursă energetică (Libido-ul sexual). Funcționează după <strong>Principiul plăcerii</strong>.</td>
+<td align="left">Sinele lui Jung este un <strong>ideal de viitor/integrare</strong>, în timp ce Sinele lui Freud este un <strong>dat biologic/instinctual din trecut</strong> (cauzalitate).</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">Jung</span><span class="tag">no-tag</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">4. Argumentaţi originalitatea concepţiei lui Jung despre dezvoltarea umană.</div>
+        <div class="answer markdown-body">
+          <p>Originalitatea concepției lui Jung despre dezvoltarea umană (care este descrisă ca un proces de devenire numit <strong>Individuare</strong>) provine din următoarele aspecte:</p>
+<ol>
+<li><strong>Orientarea Teleologică (Spre Viitor):</strong> Spre deosebire de Freud, care vedea personalitatea determinată exclusiv <strong>cauzal</strong> de evenimentele din prima copilărie, Jung susținea că personalitatea este determinată atât <strong>cauzal</strong>, cât și <strong>teleologic</strong>. Scopurile și aspirațiile viitoare (<strong>Sinele</strong> ca țel) sunt forțe motivaționale care trag dezvoltarea <strong>înainte</strong>.</li>
+<li><strong>Dezvoltarea de-a Lungul Întregii Vieți:</strong> Jung vedea dezvoltarea ca un <strong>continuum al întregii vieți</strong>, nu ca un proces care se încheie în primii 5 ani (viziunea lui Freud). El propune perioade mai largi (copilărie, pubertate, adolescență, maturitate, bătrânețe).</li>
+<li><strong>Rolul Inconștientului Colectiv:</strong> Postularea existenței <strong>inconștientului colectiv</strong> și a <strong>arhetipurilor</strong> ca factori determinanți, moșteniți și universali, care influențează dezvoltarea.</li>
+<li><strong>Mecanismele Dezvoltării:</strong> Dezvoltarea este marcată de <strong>progresie</strong> și <strong>regresie</strong>. <strong>Regresia</strong> nu este doar un mecanism de apărare (ca la Freud), ci deturnarea libidoului spre lumea internă (inconștient) pentru a găsi soluții și a stimula gândirea creativă, fără a întrerupe progresul.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">5. Care sunt criteriile care stau la baza tipologiei personalităţii şi care sunt tipurile de personalitate rezultate?</div>
+        <div class="answer markdown-body">
+          <p>Tipologia personalității (numită &quot;tipuri psihologice&quot;) se bazează pe două criterii tipologice distincte:</p>
+<p><strong>1. Atitudinile Eului (Orientarea față de lume):</strong></p>
+<ul>
+<li><strong>Introversia:</strong> Se manifestă prin <strong>centrare pe sine</strong>, retragere, timiditate. Introvertul este gata să sustragă libidoul obiectului, ferindu-se de dominația acestuia.</li>
+<li><strong>Extraversia:</strong> Se manifestă prin <strong>deschidere</strong>, sociabilitate și chiar agresivitate. Extravertitul se orientează constant după obiect, conferindu-i mare importanță.</li>
+</ul>
+<p><strong>2. Funcțiile Psihice (Modul de înțelegere a lumii):</strong></p>
+<ul>
+<li><strong>Funcții Raționale:</strong> Implică <strong>evaluări</strong>:<ul>
+<li><em>Gândirea:</em> Judecăți conștiente (adevăr/fals).</li>
+<li><em>Afectivitatea:</em> Judecăți inconștiente (plăcut/neplăcut).</li>
+</ul>
+</li>
+<li><strong>Funcții Iraționale:</strong> Sunt <strong>directe</strong>, nu folosesc evaluări:<ul>
+<li><em>Percepția:</em> Produce o imagine clară prin simțuri.</li>
+<li><em>Intuiția:</em> Nu provine direct din stimuli (mai degrabă &quot;ghicire spontană&quot;).</li>
+</ul>
+</li>
+</ul>
+<p><strong>Tipurile de personalitate rezultate (8 Tipuri Psihologice):</strong>
+Prin combinarea celor 2 atitudini (Introvert/Extravert) cu cele 4 funcții psihice (Gânditor, Afectiv, Perceptiv, Intuitiv), rezultă opt tipuri psihologice. De exemplu: Tipul extravert–gânditor (trăiește în concordanță cu reguli rigide) și Tipul introvert–intuitiv (detașat de realitate, visător).</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|9. Diferențe / asemănări între teorii|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">6. Analizaţi diferenţele dintre teoria lui Jung şi teoria lui Freud în privinţa tipologiei personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Principalele diferențe în tipologiile propuse de Jung și Freud rezidă în <strong>criteriul tipologic</strong> utilizat și în <strong>cauza</strong> tipului de personalitate:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Aspect Comparat</th>
+<th align="left">Tipologia lui Jung (Psihologia Analitică)</th>
+<th align="left">Tipologia lui Freud (Psihanaliza Clasică)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Criteriul Tipologic</strong></td>
+<td align="left"><strong>Atitudinile Eului</strong> (Intro/Extraversia) și <strong>Funcțiile Psihice</strong> (Gândire, Afectivitate, Percepție, Intuiție).</td>
+<td align="left"><strong>Rezolvarea conflictelor psihosexuale</strong> și prezența <strong>fixațiilor libidinale</strong> pe zonele erogene dominante.</td>
+</tr>
+<tr>
+<td align="left"><strong>Natura Tipului</strong></td>
+<td align="left">Tipuri bazate pe <strong>modul înnăscut</strong> de orientare a energiei psihice (introversia/extraversia sunt structurale și înnăscute). Tipologia descrie <strong>stilul și direcția în viață</strong>.</td>
+<td align="left">Tipurile nevrotice (oral, anal, falic) sunt rezultatul <strong>eșecului maturizării</strong> din copilărie, cauzate de conflicte specifice.</td>
+</tr>
+<tr>
+<td align="left"><strong>Numărul Tipologiilor</strong></td>
+<td align="left">O tipologie complexă de <strong>8 tipuri psihologice</strong>.</td>
+<td align="left">O tipologie bazată pe <strong>stadii imature</strong> (oral, anal, falic) și tipul matur (genital).</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">9. Diferențe / asemănări între teorii</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="5. Personalitatea matură|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">7. Prin ce se aseamănă şi prin ce diferă viziunea asupra personalităţii mature în psihologia analitică faţă de psihanaliza clasică?</div>
+        <div class="answer markdown-body">
+          <p>Ambele teorii recunosc o stare de echilibru și funcționare optimă la vârsta adultă, dar procesul și rezultatul sunt conceptualizate diferit:</p>
+<p><strong>Asemănări:</strong></p>
+<ul>
+<li>Ambele viziuni consideră că personalitatea matură presupune <strong>echilibru emoțional și buna funcționare în societate</strong>.</li>
+</ul>
+<p><strong>Diferențe:</strong>
+| Caracteristică | Psihologia Analitică (Jung) | Psihanaliza Clasică (Freud) |
+| :--- | :--- | :--- |
+| <strong>Scopul Maturizării</strong> | Atingerea <strong>Individuării</strong> și <strong>Transcendenei</strong>, ducând la constituirea <strong>Sinelui</strong>. Scopul este <strong>integrarea și echilibrul contrariilor</strong> (conștient/inconștient, animus/anima, Introversie/Extraversie). | Atingerea tipului <strong>Genital</strong>. Scopul este <strong>reducerea tensiunii</strong> (homeostazie) și obținerea satisfacției în <strong>muncă și dragoste</strong>. |
+| <strong>Vârsta Atingerii</strong> | Sinele se dezvoltă și se constituie abia la <strong>vârsta mijlocie</strong>. | Maturitatea (Tipul Genital) este condiționată de rezolvarea satisfăcătoare a conflictelor din <strong>primele 5 ani de viață</strong> (stadiul falic). |
+| <strong>Orientare</strong> | <strong>Teleologică</strong> (orientată spre un țel viitor — Sinele). | <strong>Cauzală</strong> (determinat de trecut și de pulsiuni). |</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">5. Personalitatea matură</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">8. Argumentaţi originalitatea concepţiei lui Jung despre dezvoltarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Originalitatea lui Jung este dată de următoarele elemente care reformulează și depășesc modelul freudian:</p>
+<ol>
+<li><strong>Dezvoltarea pe Întreaga Durată a Vieții:</strong> Jung a considerat că dezvoltarea personalității este un <strong>proces continuu care se întinde de-a lungul întregii vieți</strong>, incluzând adolescența, maturitatea și bătrânețea, spre deosebire de Freud, care o limita la prima copilărie.</li>
+<li><strong>Mecanismul de Individuare și Transcendență:</strong> Jung introduce procesul de <strong>Individuare</strong> (devenirea ca individ) ca mecanism central al dezvoltării, prin care structurile personalității sunt integrate într-un întreg coeziv, culminând cu formarea <strong>Sinelui</strong>.</li>
+<li><strong>Baza Inconștientă Extinsă:</strong> Jung postulează existența <strong>inconștientului colectiv</strong> și a <strong>arhetipurilor</strong>, care oferă patternuri moștenite ce influențează structurarea personalității. Acest concept nu exista în psihanaliza clasică.</li>
+<li><strong>Integrarea Progresiei și Regresiei:</strong> Dezvoltarea este rezultatul luptei a două tendințe contrarii: <strong>progresia</strong> (înainte) și <strong>regresia</strong> (deturnarea libidoului spre lumea internă, necesară pentru revitalizare și găsirea soluțiilor).</li>
+<li><strong>Rolul Redus al Copilăriei:</strong> Jung a evitat fixarea unor repere cronologice și nu a considerat că prima copilărie are un rol la fel de decisiv în structurarea personalității ca în teoria lui Freud.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="6. Viziunea despre natura umană|7. Raportul ereditate–mediu|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">9. Evaluaţi viziunea lui Jung despre natura umană şi argumentaţi orientarea sa. Încadraţi teoria în funcţie de concepţia sa asupra raportului ereditate–mediu.</div>
+        <div class="answer markdown-body">
+          <p><strong>Evaluarea și Orientarea Viziunii despre Natura Umană:</strong></p>
+<p>Viziunea lui Jung despre natura umană este <strong>moderat-optimistă</strong>. Deși admite existența unor forțe distructive (cum ar fi arhetipul umbrei), el considera că omul este orientat spre <strong>individuare</strong> și <strong>împlinire</strong>.</p>
+<p>Orientarea teoriei este atât <strong>cauzală</strong> (evenimentele din trecut determină prezentul), cât și <strong>teleologică</strong> (evenimentele din prezent sunt determinate de scopurile noastre viitoare, de exemplu, Sinele ca țel). Jung admite existența <strong>liberului arbitru și a spontaneității</strong>, contrazicând determinismul rigid al lui Freud.</p>
+<p><strong>Raportul Ereditate–Mediu:</strong></p>
+<p>Teoria lui Jung se concentrează puternic pe rolul factorilor înnăscuți (ereditatea), dar recunoaște rolul mediului:</p>
+<ul>
+<li><strong>Ereditatea (Biologică):</strong> Are un rol major, fiind responsabilă de <strong>structurile de bază</strong> și de distribuția energiei. <strong>Atitudinile Eului</strong> (introversia/extraversia) sunt considerate <strong>structurale și înnăscute</strong>. De asemenea, <strong>Inconștientul colectiv</strong> și <strong>arhetipurile</strong> sunt moștenite genetic.</li>
+<li><strong>Mediul (Social/Cultura):</strong> Factorii de mediu (experiența, învățarea) nu determină structura de bază, dar sunt esențiali pentru <strong>activarea arhetipurilor</strong> și pentru procesul de <strong>individuare</strong>. Experiențele de viață (de exemplu, căsnicia nereușită sau munca frustrantă) pot <strong>inhibita individuarea</strong>.</li>
+</ul>
+<p>Jung plasează astfel teoria sa în interacțiunea ereditate-mediu, dar acordă o importanță deosebită <strong>datului nativ</strong> (structurile înnăscute) în diferențierea individuală.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">6. Viziunea despre natura umană</span><span class="tag">7. Raportul ereditate–mediu</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="8. Rolul educației|Jung">
+        <div class="theorist">Jung</div>
+        <div class="question">10. Care este locul şi rolul educaţiei în această viziune?</div>
+        <div class="answer markdown-body">
+          <p>Deși Jung nu a elaborat o teorie detaliată a educației, locul și rolul acesteia pot fi deduse din mecanismele dezvoltării:</p>
+<ol>
+<li><strong>Facilitarea Individuării:</strong> Educația (sau învățarea) este necesară deoarece procesul de dobândire a individuării <strong>nu poate avea loc fără aportul învățării</strong>.</li>
+<li><strong>Dezvoltarea Conștiinței:</strong> Formarea Eului (conștiința identității) începe odată ce copilul poate face distincția între propriul corp și mediul înconjurător și este capabil să spună &quot;Eu&quot;. Educația, în sens larg (socializarea), susține această dezvoltare cognitivă.</li>
+<li><strong>Compensarea Atitudinilor:</strong> Educația influențează modul în care atitudinile innăscute (Intro/Extraversia) se manifestă. Deoarece atitudinea dominantă guvernează conștiința, influența mediului/educației ar trebui să ajute la echilibrarea tendințelor opuse, pentru a preveni dezvoltarea excesivă a unei atitudini sau funcții psihice.</li>
+<li><strong>Canalizarea Libidoului:</strong> Educația ar trebui să contribuie la <strong>transcendență</strong>, ajutând individul să își depășească condiția biologică și să-și spiritualizeze ființa prin socializare și creativitate.</li>
+</ol>
+<p>În esență, educația ar trebui să sprijine Eul în integrarea structurilor psihice și să faciliteze drumul individului spre <strong>realizarea de sine</strong>.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">8. Rolul educației</span><span class="tag">Jung</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">1. Argumentaţi originalitatea concepţiei lui Adler despre dezvoltarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Originalitatea concepției lui Alfred Adler despre dezvoltarea personalității provine din abandonarea determinismului biologic rigid al psihanalizei clasice, punând accentul pe orientarea spre viitor și pe rolul social al devenirii.</p>
+<p>Elementele originale sunt:</p>
+<ol>
+<li><strong>Orientarea Teleologică (Finalismul Ficțional):</strong> Spre deosebire de Freud, care vedea personalitatea determinată <strong>cauzal</strong> de instincte și de trecut, Adler considera că motivația și dezvoltarea sunt determinate <strong>teleologic</strong>. Personalitatea tinde spre atingerea unor <strong>scopuri (idealuri ficționale)</strong>, acestea având o existență subiectivă, dar funcționând ca forțe care trag dezvoltarea <strong>înainte</strong>.</li>
+<li><strong>Motorul Dezvoltării (Străduința spre Superioritate):</strong> Dezvoltarea nu este animată de Libidoul sexual, ci de un <strong>impuls ascendent înnăscut</strong> de a depăși <strong>sentimentul de inferioritate</strong> și de a se strădui spre <strong>superioritate</strong> în sensul de <strong>perfecțiune</strong>.</li>
+<li><strong>Rolul Constructiv al Socialului:</strong> Factorii sociali (educația, familia) au un <strong>rol constructiv</strong> în formarea personalității, spre deosebire de viziunea represivă a lui Freud.</li>
+<li><strong>Puterea Creativă a Eului (Liber Arbitru):</strong> Deși stilul de viață se cristalizează devreme, individul deține <strong>Puterea Creativă a Eului</strong> (liberul arbitru), fiind capabil să aleagă varianta adaptativă și să-și <strong>creeze propriul stil de viață</strong>, nefiind victima trecutului.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|10. Concepte originale specifice fiecărei teorii|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">2. Argumentaţi diferenţele dintre complexul de inferioritate şi cel de superioritate în privinţa modului de formare şi a rolului în funcţionarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p><strong>Sentimentul/Complexul de Inferioritate (S.I./C.I.):</strong></p>
+<ul>
+<li><strong>Mod de Formare:</strong> <strong>Sentimentul de inferioritate</strong> este o <strong>condiție normală și omniprezentă</strong> a vieții umane, rezultând din dependența copilului față de adulți. Dacă individul este incapabil să compenseze acest sentiment, el se intensifică și se transformă în <strong>complex de inferioritate</strong> (definit ca &quot;inabilitate de a rezolva problemele de viață&quot;). Formarea C.I. are loc în trei situații principale: <strong>inferioritatea organică</strong> (eșecul depășirii unui defect fizic), <strong>răsfățul</strong> (ducând la incapacitatea de a se descurca singur) sau <strong>neglijarea</strong> (generând sentimente de inutilitate și devalorizare).</li>
+<li><strong>Rol în Funcționare:</strong> S.I. este <strong>motorul dezvoltării umane</strong>, furnizând motivația necesară pentru creștere și progres.</li>
+</ul>
+<p><strong>Complexul de Superioritate (C.S.):</strong></p>
+<ul>
+<li><strong>Mod de Formare:</strong> C.S. poate deriva din încercarea de a depăși C.I.. Nu este scopul ultim al dezvoltării (care este perfecțiunea), ci o reacție exagerată.</li>
+<li><strong>Rol în Funcționare:</strong> Se manifestă sub forma unei dorințe de performanță, <strong>vanitate, centrare pe sine</strong> și tendința de a-i denigra pe alții. Este o manifestare neproductivă a luptei pentru superioritate.</li>
+</ul>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">10. Concepte originale specifice fiecărei teorii</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="2. Motivația umană|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">3. Care sunt elementele originale ale viziunii lui Adler asupra motivaţiei?</div>
+        <div class="answer markdown-body">
+          <p>Viziunea lui Adler asupra motivației (Psihologia Individualității) este una dintre principalele divergențe față de psihanaliza clasică.</p>
+<p>Elementele originale sunt:</p>
+<ol>
+<li><strong>Orientarea Motivației (Finalismul):</strong> Motivația este orientată de <strong>idealuri ficționale</strong> (scopuri plasate în viitor, cum ar fi perfecțiunea), nefiind determinată rigid de forțe fiziologice din trecut, cum sunt pulsiunile la Freud.</li>
+<li><strong>Sursa Motivațională Centrală:</strong> Impulsul fundamental este <strong>străduința spre superioritate</strong> (perfecționare sau desăvârșire), care este o tendință general umană înnăscută. Această tendință este activată de <strong>sentimentul de inferioritate</strong>.</li>
+<li><strong>Dinamica Tensiunii:</strong> Motivația are rolul de a <strong>amplifica tensiunea</strong> și de a rupe echilibrul, împingând spre un consum sporit de energie și efort. Acest lucru contravine viziunii lui Freud, unde pulsiunile acționează în sensul <strong>reducerii tensiunii</strong> (homeostazie).</li>
+<li><strong>Motivația Socială:</strong> Interesele sociale sunt mai importante decât trebuința de putere și dominare. Eforturile individului sunt orientate spre <strong>binele tuturor</strong>, indicând o compatibilitate totală între individ și societate în funcționarea motivațională.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">2. Motivația umană</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="9. Diferențe / asemănări între teorii|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">4. Analizaţi în teoria lui Adler rolul factorilor biologici şi sociali în formarea şi funcţionarea personalităţii, comparativ cu psihanaliza clasică.</div>
+        <div class="answer markdown-body">
+          <p>Adler era considerat un disident timpuriu al psihanalizei și a formulat o perspectivă în care factorii sociali capătă o importanță primordială în structurarea personalității.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Factor</th>
+<th align="left">Alfred Adler (Psihologia Individualității)</th>
+<th align="left">Sigmund Freud (Psihanaliza Clasică)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Rolul Biologic (Ereditatea)</strong></td>
+<td align="left">Furnizează <strong>structurile de bază înnăscute</strong> și tendințe generale umane precum <strong>străduința spre superioritate</strong> și <strong>potențialul intereselor sociale</strong>.</td>
+<td align="left">Este <strong>hotărâtor</strong> (determinism biologic). Răspunzător pentru <strong>instincte (pulsiuni)</strong> și succesiunea stadiilor psihosexuale.</td>
+</tr>
+<tr>
+<td align="left"><strong>Rolul Social (Mediul/Cultura)</strong></td>
+<td align="left"><strong>Factor hotărâtor</strong> și <strong>constructiv</strong>. Socialul determină <strong>conținutul stilului de viață</strong> prin interacțiunile familiale (rolul mamei, ordinea nașterii).</td>
+<td align="left">Are un rol <strong>represiv</strong>, impunând constrângerile realității și formând <strong>conținuturile Eului și Supraeului</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Accentul pe Dezvoltare</strong></td>
+<td align="left">Se pune accentul pe <strong>autodeterminare, conștient</strong> și rațiune (Puterea Creativă a Eului).</td>
+<td align="left">Se pune accentul pe <strong>determinismul inconștient</strong> și pe forțele instinctuale (Sinele).</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">9. Diferențe / asemănări între teorii</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="Adler|no-tag">
+        <div class="theorist">Adler</div>
+        <div class="question">5. Argumentaţi relaţiile dintre stilul de viaţă şi funcţionarea personalităţii adulte.</div>
+        <div class="answer markdown-body">
+          <p><strong>Stilul de viață</strong> reprezintă modul particular în care individul încearcă să atingă perfecțiunea (superioritatea), fiind un pattern specific de trăsături, comportamente și deprinderi. Acesta se cristalizează timpuriu (în jurul vârstei de 5 ani) ca o strategie de a compensa sentimentele de inferioritate.</p>
+<p>Relația dintre stilul de viață și funcționarea personalității adulte este de <strong>determinism</strong>:</p>
+<ol>
+<li><strong>Stabilitatea Comportamentală:</strong> Odată format, stilul de viață <strong>rămâne constant de-a lungul vieții</strong> și modelează tot ceea ce face individul, inclusiv modul în care acesta abordează cele trei probleme majore ale vieții (relațiile, profesia, dragostea).</li>
+<li><strong>Funcționarea Matura/Adaptativă:</strong> Un stil de viață adaptativ (Tipul capabil social) este caracterizat de <strong>interese sociale bine dezvoltate</strong>, permițând individului să <strong>coopereze cu ceilalți</strong> și să înfrunte problemele vieții.</li>
+<li><strong>Funcționarea Immatură/Nevrotică:</strong> Stilurile de viață inadaptate (<strong>dominator, dependent, evitant</strong>) sunt în <strong>discordanță cu realitatea socială</strong> și sunt incapabile să coopereze. Aceste stiluri mențin <strong>patternuri de relaționare defectuoase</strong> formate în copilărie și sunt cele mai predispuse la nevroze și psihoze.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">Adler</span><span class="tag">no-tag</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|9. Diferențe / asemănări între teorii|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">6. Analizaţi diferenţele dintre teoria lui Adler şi teoria lui Freud în privinţa tipologiei personalităţii.</div>
+        <div class="answer markdown-body">
+          <table>
+<thead>
+<tr>
+<th align="left">Aspect</th>
+<th align="left">Alfred Adler (Psihologia Individualității)</th>
+<th align="left">Sigmund Freud (Psihanaliza Clasică)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Criteriul Tipologic</strong></td>
+<td align="left"><strong>Factori sociali</strong> (gradul de dezvoltare a intereselor sociale, capacitatea de cooperare) și <strong>ordinea nașterii</strong>.</td>
+<td align="left"><strong>Factori biologici/psihosexuali</strong> (localizarea Libidoului) și modul de rezolvare a conflictelor psihosexuale (fixații libidinale).</td>
+</tr>
+<tr>
+<td align="left"><strong>Natura Tipului Imatur</strong></td>
+<td align="left">Tipul imatur (nevrotic) este rezultatul <strong>păstrării unor patternuri de relaționare defectuoase</strong> cu părinții și al incapacității de a coopera cu societatea (ex: Tipul dependent).</td>
+<td align="left">Tipul imatur (nevrotic) este rezultatul <strong>eșecului maturizării</strong>, al investirii energiei libidinale într-un stadiu infantil (oral, anal, falic).</td>
+</tr>
+<tr>
+<td align="left"><strong>Natura Tipului Matur</strong></td>
+<td align="left">Tipul capabil social, definit de <strong>buna funcționare socială și cooperare</strong>.</td>
+<td align="left">Tipul genital, definit de <strong>capacitatea de a munci și de a iubi</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Orientare</strong></td>
+<td align="left"><strong>Optimistă</strong> și centrată pe <strong>liber arbitru</strong> (Puterea Creativă a Eului).</td>
+<td align="left"><strong>Pesimistă</strong> și centrată pe <strong>determinismul biologic</strong>.</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">9. Diferențe / asemănări între teorii</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">7. Explicaţi natura specificului tipurilor de personalitate în viziunea lui Adler.</div>
+        <div class="answer markdown-body">
+          <p>Specificul tipurilor de personalitate la Adler este definit prin <strong>Stilul de Viață</strong> al individului, care determină atitudinea sa față de sine și față de lume, în special față de cerințele sociale. Adler a propus două tipologii principale:</p>
+<p><strong>1. Tipologia bazată pe Stilul de Viață (Interese Sociale):</strong> Aceasta diferențiază indivizii în funcție de modul în care reușesc să se adapteze social și să coopereze.</p>
+<ul>
+<li><strong>Tipurile imature (nevrotice):</strong> <strong>Dominator</strong> (lipsit de conștiință și interese sociale, agresiv sau autodistructiv), <strong>Dependent</strong> (pasiv, așteaptă totul de la ceilalți), <strong>Evitant</strong> (se ferește de înfruntarea problemelor). Acestea sunt anormale deoarece există o discordanță între stilul lor și realitatea socială.</li>
+<li><strong>Tipul matur:</strong> <strong>Capabil social</strong> (poate coopera și înfruntă problemele vieții).</li>
+</ul>
+<p><strong>2. Tipologia bazată pe Ordinea Nașterii (Poziția în Constelația Familială):</strong> Această tipologie ilustrează modul în care influențele sociale din familie structurează personalitatea.</p>
+<ul>
+<li>De exemplu, <strong>Primul născut</strong> este marcat de detronare, devenind orientat spre trecut și interesat de menținerea ordinii și autorității. El poate dezvolta sentimente de insecuritate extremă, ajungând la comportamente nevrotice sau criminale.</li>
+<li><strong>Al doilea născut</strong> este, dimpotrivă, optimist și orientat spre viitor, având tendința de a-l depăși pe primul născut.</li>
+</ul>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="5. Personalitatea matură|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">8. Prin ce se aseamănă şi prin ce diferă viziunea asupra personalităţii mature în psihologia individualităţii faţă de psihanaliza clasică şi faţă de psihologia analitică?</div>
+        <div class="answer markdown-body">
+          <p>Personalitatea matură la Adler (Tipul Capabil Social) se definește prin capacitatea de a găsi soluții la problemele vieții și prin gradul ridicat de <strong>interese sociale și cooperare</strong>.</p>
+<p><strong>Asemănări:</strong></p>
+<ul>
+<li>Toate cele trei teorii (Adler, Freud, Jung) consideră că personalitatea matură presupune <strong>echilibru emoțional și buna funcționare în societate</strong>.</li>
+</ul>
+<p><strong>Diferențe:</strong>
+| Caracteristică | Adler (Psih. Individualității) | Freud (Psih. Clasică) | Jung (Psih. Analitică) |
+| :--- | :--- | :--- |
+| <strong>Mecanismul Cheie</strong> | <strong>Străduința spre perfecțiune</strong> (superioritate), orientată teleologic. | <strong>Reducerea tensiunii</strong> (homeostazie) și absența fixațiilor libidinale. | <strong>Individuarea</strong> (integrarea Sinelui) și echilibrul contrariilor. |
+| <strong>Criteriul Esențial</strong> | <strong>Interesele sociale</strong> dezvoltate și capacitatea de <strong>cooperare</strong> (acțiune constructivă spre binele comun). | Satisfacția în <strong>muncă și dragoste</strong> (relație heterosexuală matură). | Dezvoltarea <strong>Sinelui</strong> (integralitatea personalității totale), atins la vârsta mijlocie. |
+| <strong>Nevroză vs. Maturitate</strong>| Nevroza este eșecul rezolvării problemelor de viață din cauza <strong>patternurilor defectuoase de relaționare</strong>. | Nevroza este cauzată de <strong>conflicte psihosexuale nerezolvate</strong> (fixații) și utilizarea apărărilor iraționale. | Nevroza este rezultatul conflictelor intrapsihice intense. |</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">5. Personalitatea matură</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="6. Viziunea despre natura umană|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">9. Evaluaţi viziunea lui Adler despre natura umană şi argumentaţi orientarea sa.</div>
+        <div class="answer markdown-body">
+          <p>Viziunea lui Adler despre natura umană este una <strong>optimistă</strong>, situându-se în contrast cu imaginea sumbră și pesimistă promovată de Freud.</p>
+<p><strong>Argumentarea Orientării:</strong></p>
+<ol>
+<li><strong>Omul ca ființă rațională și conștientă:</strong> Adler respinge ideea că omul este dominat de pulsiuni oarbe sau instincte animalice. El afirmă că ceea ce este specific omului este <strong>conștientul, rațiunea și liberul arbitru</strong>.</li>
+<li><strong>Proactivitate și Autodeterminare:</strong> Omul este o ființă <strong>proactivă</strong> și capabilă de <strong>autodeterminare</strong>, putând să-și influențeze soarta prin decizii conștiente (Puterea Creativă a Eului).</li>
+<li><strong>Orientarea Finalistă:</strong> Omul este mânat de un impuls înnăscut de <strong>perfecționare continuă</strong>, fiind orientat spre <strong>scopuri viitoare (teleologie)</strong>.</li>
+<li><strong>Orientarea Socială:</strong> Omul este o ființă socială, iar motivația lui fundamentală (străduința spre superioritate) este compatibilă cu societatea, vizând <strong>progresul</strong> nu doar la nivel individual, ci și social.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">6. Viziunea despre natura umană</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="7. Raportul ereditate–mediu|8. Rolul educației|Adler">
+        <div class="theorist">Adler</div>
+        <div class="question">10. Încadraţi teoria în funcţie de concepţia sa asupra raportului ereditate–mediu şi a rolului fiecăruia în formarea personalităţii. Care este locul şi rolul educaţiei, ca influenţă socială formativă, în această viziune?</div>
+        <div class="answer markdown-body">
+          <p><strong>Raportul Ereditate–Mediu:</strong>
+Adler nu exclude factorii înnăscuți (ereditatea), dar acordă <strong>rolul cel mai important factorilor sociali</strong> în structurarea personalității.</p>
+<ul>
+<li><strong>Ereditatea:</strong> Este responsabilă pentru tendințele înnăscute, cum ar fi <strong>străduința spre superioritate</strong> și <strong>potențialul intereselor sociale</strong>. Acestea sunt premisele, fondul pe care se realizează dezvoltarea.</li>
+<li><strong>Mediul:</strong> <strong>Experiența</strong> (în special interacțiunile familiale timpurii, cum ar fi <strong>ordinea nașterii</strong> și relația cu părinții) hotărăște <strong>modul în care se vor împlini</strong> tendințele înnăscute (adică stabilește <strong>conținutul stilului de viață</strong>).</li>
+</ul>
+<p><strong>Locul și Rolul Educației:</strong>
+Educația, ca influență socială formativă, are un <strong>rol esențial și constructiv</strong> în viziunea lui Adler.</p>
+<ol>
+<li><strong>Modelarea Stilului de Viață:</strong> Educația (socializarea) determină modul în care copilul interpretează experiențele și își formează stilul de viață.</li>
+<li><strong>Dezvoltarea Intereselor Sociale:</strong> Educația, în special prin <strong>comportamentul mamei</strong>, poate stimula dezvoltarea <strong>intereselor sociale</strong> (cooperarea, solidaritatea, curajul), care sunt necesare pentru o personalitate matură și adaptată.</li>
+<li><strong>Cauza Nevrozei:</strong> Deficiențele în educație, cum ar fi <strong>răsfățul</strong> sau <strong>neglijarea</strong>, sunt cauze directe ale formării complexului de inferioritate, deoarece îl împiedică pe copil să dobândească abilitățile de a se confrunta cu problemele vieții.</li>
+<li><strong>Puterea Autodeterminării:</strong> Deși experiențele din copilărie sunt hotărâtoare, educația târzie și psihoterapia se bazează pe capacitatea individului de a-și <strong>asuma conștient destinul</strong> și de a alege o cale de viață adaptativă, grație <strong>puterii creative a Eului</strong>.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">7. Raportul ereditate–mediu</span><span class="tag">8. Rolul educației</span><span class="tag">Adler</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="2. Motivația umană|4. Dezvoltarea personalității (ontogeneză)|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">1. Argumentaţi originalitatea concepţiei lui Horney despre rolul motivaţiei în dezvoltarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Originalitatea concepției lui Karen Horney privind rolul motivației în dezvoltarea personalității (față de psihanaliza clasică) constă în <strong>deplasarea accentului de la motivația biologică (instincte sexuale)</strong> la <strong>motivația socială (trebuința de securitate)</strong> și la <strong>impulsul înnăscut de creștere și împlinire</strong>.</p>
+<ol>
+<li><strong>Sursa motivației: Factorii sociali vs. Biologic:</strong> Horney este de acord cu Freud în privința importanței primilor 5 ani de viață, dar consideră că <strong>influența predominantă este a factorilor sociali și nu a celor biologici</strong>. Nu Libidoul sexual (Eros) este forța primară, ci trebuințele bazale de <strong>siguranță și satisfacție</strong>.</li>
+<li><strong>Motivația fundamentală:</strong> <strong>Trebuința de siguranță</strong> și <strong>absența fricii</strong> sunt esențiale și au o importanță decisivă. Nevroza rezultă din frustrarea acestor trebuințe, generând <strong>ostilitate</strong>.</li>
+<li><strong>Impulsul de creștere:</strong> Horney consideră că ființa umană are o <strong>trebuință înnăscută de a crește și de a-și împlini potențialul propriu</strong>. Acesta este <strong>scopul ultim al vieții</strong>, nu neapărat perpetuarea speciei (viziunea lui Freud).</li>
+<li><strong>Motivația nevrotică:</strong> O altă componentă motivatoare, specifică personalității nevrotice, este dată de <strong>trebuințele nevrotice</strong> (de exemplu, afecțiune, putere, prestigiu). Acestea sunt soluții iraționale la problemele persoanei, având un <strong>caracter compulsiv</strong> și fiind mai puternice decât trebuințele fiziologice sau sexuale. Satisfacerea lor nu urmărește plăcerea sau fericirea, ci <strong>dobândirea securității</strong> și <strong>evitarea suferinței</strong>.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">2. Motivația umană</span><span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="Horney|no-tag">
+        <div class="theorist">Horney</div>
+        <div class="question">2. Arătaţi în ce constă rolul tendinţelor nevrotice în structurarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Tendințele nevrotice (sau trebuințele nevrotice) sunt soluții iraționale (compulsive) utilizate de individ pentru a se apăra împotriva <strong>anxietății bazale</strong> și a <strong>sentimentului de neajutorare</strong> (neîn siguranță), care rezultă din relațiile disfuncționale cu părinții în copilărie.</p>
+<p>**Rolul lor în structurarea personalității este: **</p>
+<ol>
+<li><strong>Mecanisme de autoprotecție:</strong> Tendințele nevrotice evoluează din mecanismele de apărare (câștigarea afecțiunii, supunerea, dobândirea puterii sau evitarea celorlalți) și au rolul de a <strong>reduce anxietatea</strong> și de a dobândi securitate.</li>
+<li><strong>Modelarea personalității imature:</strong> Atunci când aceste tendințe sunt urmărite <strong>intens și compulsiv</strong>, ele devin <strong>rigide</strong> și se exteriorizează fără discriminare în comportament, ducând la structurarea unui <strong>tip de personalitate nevrotică</strong> (conformistă, agresivă sau detașată).</li>
+<li><strong>Sursa conflictului și alienării:</strong> Deși reduc anxietatea pe moment, ele <strong>perturbă funcționarea normală a individului în grupul social</strong>. Dacă individul folosește mai multe mecanisme incompatibile (de exemplu, să domine pe ceilalți și să fie iubit de ei), apar <strong>noi conflicte</strong>. Ele mențin imaginea idealizată de sine rigidă, ceea ce <strong>împiedică adaptarea flexibilă</strong> și duce la <strong>alienare</strong> față de Eul adevărat.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">Horney</span><span class="tag">no-tag</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="1. Sistemul / structura personalității|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">3. În ce constă sistemul de personalitate la Horney?</div>
+        <div class="answer markdown-body">
+          <p>Sistemul de personalitate la Karen Horney este centrat pe <strong>factorii sociali și culturali</strong>. Deși sursa nu definește explicit structuri precum Sinele sau Eul în maniera freudiană, sistemul său se bazează pe următoarele concepte interdependente:</p>
+<ol>
+<li><strong>Trebuințele fundamentale (Nucleul):</strong> Trebuința de <strong>siguranță</strong> (securitate și absența fricii) și trebuința de <strong>satisfacție</strong>.</li>
+<li><strong>Anxietatea bazală:</strong> O stare de nesiguranță și frică intensă care rezultă din frustrarea trebuinței de siguranță de către părinți (printr-un comportament care provoacă ostilitate).</li>
+<li><strong>Mecanismele de autoprotecție/Tendințele nevrotice (Periferia):</strong> Soluții iraționale și compulsive pentru reducerea anxietății. Acestea sunt grupate în 10 trebuințe nevrotice și, ulterior, în <strong>trei orientări majore</strong> care definesc tipurile de personalitate: <strong>orientarea spre oameni, împotriva oamenilor și evitarea oamenilor</strong>.</li>
+<li><strong>Imaginea de Sine:</strong> Include <strong>Imaginea idealizată de sine</strong> (comună omului normal și nevroticului, având rolul de a da unitate personalității) și <strong>Eul adevărat/realist</strong>. La nevrotici, imaginea idealizată este rigidă și distorsionată, ducând la alienare.</li>
+<li><strong>Impulsul de creștere:</strong> Tendința înnăscută de a se dezvolta și de a-și împlini potențialul.</li>
+</ol>
+<p>Sistemul de personalitate este dinamic, marcat de <strong>conflictul</strong> dintre <strong>Eul adevărat</strong> și <strong>tendințele nevrotice</strong> (care provin din efortul de a atinge imaginea idealizată de sine).</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">1. Sistemul / structura personalității</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|9. Diferențe / asemănări între teorii|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">4. Analizaţi diferenţele dintre teoria lui Horney şi teoria lui Freud în privinţa tipologiei personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Principalele diferențe dintre tipologia personalității a lui Horney și cea a lui Freud (psihanaliza clasică) se referă la <strong>criteriul de clasificare</strong>, <strong>cauza formării tipului</strong> și <strong>natura conflictului</strong>:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Aspect Comparat</th>
+<th align="left">Karen Horney (Psihologia Feminină)</th>
+<th align="left">Sigmund Freud (Psihanaliza Clasică)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Criteriul Tipologic</strong></td>
+<td align="left"><strong>Atitudinea individului față de ceilalți</strong> (Orientarea spre, împotriva sau evitarea oamenilor).</td>
+<td align="left"><strong>Localizarea Libidoului</strong> în zone erogene (oral, anal, falic).</td>
+</tr>
+<tr>
+<td align="left"><strong>Cauza Tipului Nevrotic</strong></td>
+<td align="left">Eșecul depășirii <strong>anxietății bazale</strong> (frică și nesiguranță) cauzat de <strong>relațiile defectuoase cu părinții</strong> (factori sociali).</td>
+<td align="left"><strong>Fixația libidinală</strong> pe un stadiu psihosexual timpuriu (factori biologici).</td>
+</tr>
+<tr>
+<td align="left"><strong>Natura Conflictului</strong></td>
+<td align="left"><strong>Conflict psihosocial</strong> (între copil și mediu) și <strong>intrapsihic</strong> (între Eul adevărat și imaginea idealizată de sine).</td>
+<td align="left"><strong>Conflict psihosexual</strong> (între Sine, Eu și Supraeu) bazat pe instincte.</td>
+</tr>
+<tr>
+<td align="left"><strong>Tipurile Rezultate</strong></td>
+<td align="left">Tipurile nevrotice: <strong>Conformistă (Compliantă), Agresivă, Detașată</strong>.</td>
+<td align="left">Tipurile nevrotice: <strong>Oral, Anal, Falic</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Rolul Supraeului</strong></td>
+<td align="left">Nu acceptă viziunea că femeile au un supraeu slab, aceasta fiind o prejudecată masculină.</td>
+<td align="left">Supraeu slab la femei, cauzat de rezolvarea incompletă a Complexului Electra.</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">9. Diferențe / asemănări între teorii</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|5. Personalitatea matură|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">5. Analizaţi specificul tipurilor de personalitate în viziunea lui Horney şi identificaţi principale deosebiri dintre personalitatea matură şi personalităţile nevrotice.</div>
+        <div class="answer markdown-body">
+          <p>Horney a grupat cele 10 trebuințe nevrotice în trei categorii, care definesc trei tipuri principale de personalitate nevrotică:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Tipul de Personalitate (Tendința Nevrotică)</th>
+<th align="left">Orientarea (Atitudinea)</th>
+<th align="left">Trebuințe Nevrotice asociate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Conformistă / Compliantă</strong></td>
+<td align="left">Orientare <strong>spre oameni</strong></td>
+<td align="left">Afecțiune și aprobare, partener dominator.</td>
+</tr>
+<tr>
+<td align="left"><strong>Agresivă</strong></td>
+<td align="left">Orientare <strong>împotriva oamenilor</strong></td>
+<td align="left">Putere, exploatarea celorlalți, prestigiu, admirația celorlalți.</td>
+</tr>
+<tr>
+<td align="left"><strong>Detașată</strong></td>
+<td align="left">Orientare spre <strong>evitarea oamenilor</strong></td>
+<td align="left">Limite stricte și înguste ale vieții, ambiție, independență și autosuficiență, perfecționism.</td>
+</tr>
+</tbody></table>
+<p><strong>Deosebiri dintre Personalitatea Matură (Normală) și Personalitățile Nevrotice:</strong></p>
+<ol>
+<li><strong>Flexibilitate vs. Rigiditate:</strong> La <strong>personalitatea normală</strong>, tendințele nevrotice (care sunt general-umane) se manifestă <strong>flexibil și echilibrat</strong>. <strong>Nevroticul</strong> este <strong>rigid</strong> și nu realizează compatibilizarea lor, iar manifestarea lor este <strong>compulsivă</strong>.</li>
+<li><strong>Sursa Motivațională:</strong> Personalitatea matură este animată de <strong>tendința înnăscută de creștere și împlinire</strong> a potențialului. Personalitatea nevrotică este centrată pe <strong>mecanisme de apărare</strong> și pe fuga de anxietate.</li>
+<li><strong>Imaginea de Sine:</strong> Personalitatea matură are o <strong>imagine realistă de sine</strong>. Nevroticul are o <strong>imagine idealizată de sine, statică și rigidă</strong>, care împiedică adaptarea flexibilă și duce la alienarea de Eul adevărat.</li>
+<li><strong>Funcționare:</strong> Normalitatea este asimilată cu echilibrul emoțional și <strong>buna funcționare în societate</strong>. Personalitatea nevrotică este marcată de <strong>patternuri de relaționare defectuoase</strong> (formate în relația cu părinții).</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">5. Personalitatea matură</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="5. Personalitatea matură|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">6. Prin ce se aseamănă şi prin ce diferă viziunea asupra personalităţii mature în psihologia feminină faţă de psihanaliza clasică?</div>
+        <div class="answer markdown-body">
+          <p>Personalitatea matură la Horney (Psihologia Feminină) este definită prin absența rigidității nevrotice și orientarea spre împlinirea potențialului înnăscut.</p>
+<p><strong>Asemănări:</strong></p>
+<ul>
+<li>Ambele viziuni recunosc importanța <strong>primei copilării</strong> în structurarea personalității.</li>
+<li>Ambele consideră că normalitatea (maturitatea) presupune <strong>echilibru emoțional</strong> și <strong>buna funcționare în societate</strong>.</li>
+</ul>
+<p><strong>Diferențe:</strong>
+| Caracteristică | Horney (Psihologia Feminină) | Freud (Psihanaliza Clasică) |
+| :--- | :--- | :--- |
+| <strong>Criteriul Maturității</strong> | <strong>Împlinirea tendinței înnăscute de creștere și dezvoltare</strong>. Funcționarea flexibilă și realistă. | <strong>Tipul Genital</strong>; capacitatea de a munci și de a iubi. <strong>Absența apărărilor iraționale</strong> ale Eului. |
+| <strong>Mecanismul Nevrozei</strong> | Cauzat de factori <strong>socio-culturali</strong> (relații frustrante cu părinții, nesatisfacerea securității). | Cauzat de factori <strong>biologici</strong> (fixații libidinale și conflicte psihosexuale). |
+| <strong>Rolul Supraeului</strong> | Nu există o viziune a Supraeului slab la femei. | Femeile au un <strong>Supraeu slab dezvoltat</strong> din cauza rezolvării incomplete a Complexului Electra. |
+| <strong>Orientare</strong> | Moderat optimistă, cu accent pe <strong>liberul arbitru</strong> la maturitate. | Pesimistă, bazată pe <strong>determinismul biologic</strong> (omul este prizonierul instinctelor). |</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">5. Personalitatea matură</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="10. Concepte originale specifice fiecărei teorii|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">7. Horney a respins teza lui Freud cu privire la inferioritatea biologică a femeii. Cum explică ea sentimentele de inadecvare ale femeii?</div>
+        <div class="answer markdown-body">
+          <p>Karen Horney a respins categoric teza lui Freud conform căreia femeile suferă de <strong>invidia de penis (complexul castrării)</strong> și au un <strong>Supraeu slab</strong> din cauza anatomiei lor.</p>
+<p>Ea explică sentimentele de inadecvare și inferioritate ale femeii prin <strong>factori culturali și sociali</strong>:</p>
+<ol>
+<li><strong>Cultura Falocratică:</strong> Complexele de inferioritate ale femeilor sunt un rezultat al <strong>influenței culturale</strong>, deoarece cultura este <strong>falocratică</strong> (dominată de bărbați).</li>
+<li><strong>Discriminarea Socială:</strong> De-a lungul istoriei, femeile au fost <strong>discriminate social, economic și cultural</strong>.</li>
+<li><strong>Invidia Bărbaților pentru Procreare:</strong> Horney a descoperit, din relatările pacienților bărbați, existența unei <strong>invidi față de capacitatea femeilor de a procrea</strong> (râvna de pântec). Bărbații își sublimează aceste dorințe neîmplinite și le <strong>supracompensează prin succese profesionale</strong> sau prin <strong>tendința de a minimaliza femeia și a-i menține statutul inferior</strong>.</li>
+<li><strong>Rolul Definit de Societate:</strong> Dorința femeilor de a fi bărbat nu este biologică, ci exprimă dorința de a avea <strong>calitățile sau privilegiile</strong> asociate masculinului în societatea dată (forță, curaj, independență, succes, libertate sexuală).</li>
+<li><strong>Masochismul Feminin:</strong> Tendința femeilor spre masochism nu este cauzată de inferioritatea fizică, ci de faptul că <strong>societatea le reprimă agresivitatea și le încurajează pasivitatea</strong>.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">10. Concepte originale specifice fiecărei teorii</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="10. Concepte originale specifice fiecărei teorii|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">8. Care sunt principalele elemente de originalitate ale psihologiei feminie?</div>
+        <div class="answer markdown-body">
+          <p>Originalitatea psihologiei feminine propuse de Karen Horney (ca ramură a neopsihanalizei și ca precursor al curentului culturalist american) constă în:</p>
+<ol>
+<li><strong>Determinismul Socio-Cultural:</strong> Afirmarea faptului că <strong>factorii sociali și culturali</strong> (nu cei biologici) sunt hotărâtori în dezvoltarea personalității și în etiologia nevrozelor.</li>
+<li><strong>Respingerea Dogmei Freudiane:</strong> Contestarea viziunii că <strong>femeile sunt victimele anatomiei lor</strong> (Supraeu slab, invidia de penis) și explicarea inadecvaării feminine prin <strong>discriminare culturală</strong>.</li>
+<li><strong>Motivația Bazală:</strong> Identificarea <strong>trebuinței de siguranță</strong> (securitate și absența fricii) ca fiind forța motivațională primordială a copilăriei, a cărei frustrare produce <strong>anxietate bazală</strong> și ostilitate.</li>
+<li><strong>Tipologia Nevrotică:</strong> Crearea unei tipologii bazate pe <strong>orientarea interpersonală</strong> (spre, împotriva sau evitarea oamenilor).</li>
+<li><strong>Viziunea Optimistă:</strong> Promovarea unei viziuni moderat-optimiste, în care individul are o <strong>tendință înnăscută de creștere și împlinire</strong>, și este capabil de <strong>liber arbitru</strong> la maturitate, putând să-și rezolve problemele nevrotice prin autoanaliză.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">10. Concepte originale specifice fiecărei teorii</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="6. Viziunea despre natura umană|7. Raportul ereditate–mediu|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">9. Încadraţi teoria în funcţie de concepţia sa asupra raportului ereditate – mediu şi a rolului fiecăruia în formarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Teoria lui Karen Horney se încadrează în curentul <strong>neopsihanalitic culturalist</strong>, susținând <strong>prevalența factorilor sociali (mediul)</strong> asupra eredității.</p>
+<ul>
+<li><strong>Ereditatea (Biologicul):</strong> Recunoaște existența unei <strong>trebuințe înnăscute de a crește și a-și împlini potențialul</strong>. De asemenea, trebuințele bazale (de hrană, apă, somn) și tendința generală de a tinde spre siguranță sunt recunoscute, dar <strong>nu au un rol în structurarea personalității</strong>.</li>
+<li><strong>Mediul (Socialul/Cultura):</strong> Are <strong>influența predominantă</strong>. Factorii sociali (comportamentul părinților, relațiile părinte-copil) sunt <strong>hotărâtori</strong> în modelarea personalității, în geneza ostilității, a anxietății bazale și, ulterior, a nevrozelor.</li>
+</ul>
+<p><strong>Rolul lor în formarea personalității:</strong>
+Dezvoltarea nevrozei este rezultatul acțiunii factorilor sociali care frustrează trebuința de siguranță. Modul în care societatea definește rolul femeii și realizează educația diferențiată a celor două sexe este un factor determinant cultural al personalității.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">6. Viziunea despre natura umană</span><span class="tag">7. Raportul ereditate–mediu</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="8. Rolul educației|Horney">
+        <div class="theorist">Horney</div>
+        <div class="question">10. Care este locul şi rolul educaţiei, ca influenţă socială formativă, în această viziune? Care sunt cei mai importanţi agenţi sociali în acest sens?</div>
+        <div class="answer markdown-body">
+          <p>Educația, în sens larg (socializarea), joacă un <strong>rol crucial</strong> în formarea personalității, deoarece Horney consideră că influența socială este hotărâtoare.</p>
+<p><strong>Locul și Rolul Educației:</strong></p>
+<ol>
+<li><strong>Modelarea Nevrozei:</strong> Deficiențele în educație, cum ar fi <strong>răsfățul, neglijarea, pedepsele nedrepte</strong> sau <strong>ridiculizarea</strong>, provoacă <strong>ostilitate</strong> în copil, ducând la nesatisfacerea trebuinței de siguranță și la dezvoltarea ulterioară a nevrozelor.</li>
+<li><strong>Prevenirea Nevrozei:</strong> Singura modalitate de a evita dezvoltarea personalității nevrotice este oferirea de <strong>dragoste necondiționată</strong> din partea părinților, satisfacerea autentică a nevoilor copilului și o <strong>relaționare sănătoasă în interiorul familiei</strong>. O atitudine afectuoasă și protectoare îl ajută pe copil să depășească conflictele și să se simtă în siguranță.</li>
+<li><strong>Modelarea de Gen:</strong> Educația diferențiată a celor două sexe, impusă de cultura specifică (falocratică), determină particularitățile psihologiei feminine și sentimentele de inadecvare.</li>
+</ol>
+<p><strong>Cei mai importanți agenți sociali:</strong>
+Cei mai importanți agenți sociali în această viziune sunt <strong>părinții</strong> (sau cei apropiați), deoarece <strong>disfuncțiile în relația părinte-copil</strong> sunt responsabile de prevalența trebuințelor nevrotice și de structurarea unei personalități imature. Părinții sunt cei care creează sentimentul de siguranță prin căldură și afecțiune.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">8. Rolul educației</span><span class="tag">Horney</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="1. Sistemul / structura personalității|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">1. În ce constă sistemul de personalitate la Fromm?</div>
+        <div class="answer markdown-body">
+          <p>Sistemul de personalitate (omul, ca ființă transcendentă) la Fromm constă în tensiunea constantă dintre <strong>dilema umană fundamentală: libertate/securitate</strong> și modalitățile prin care individul încearcă să gestioneze această dilemă, precum și setul de trebuințe psihologice pe care încearcă să le satisfacă.</p>
+<p>Elemente centrale ale sistemului:</p>
+<ol>
+<li><strong>Dilema Libertate/Securitate:</strong> Comportamentul omului nu este strict programat biologic, iar conștientizarea de sine și de lumea înconjurătoare a rupt omul de natură. Libertatea astfel dobândită îi aduce <strong>singurătate și teamă</strong>, deoarece scade sentimentul de securitate. Personalitatea este modelată de efortul individului de a menține un echilibru între securitate și libertate.</li>
+<li><strong>Trebuințele Psihologice:</strong> Pe lângă trebuințele biologice, omul este animat de <strong>șase categorii de trebuințe psihologice</strong> de natură socială. Acestea includ: <strong>de apartenență</strong>, <strong>de transcendență</strong>, <strong>de înrădăcinare</strong>, <strong>de identitate</strong>, <strong>de repere (orientare)</strong> și <strong>de stimulare</strong>. Structurarea personalității depinde de modul în care aceste trebuințe sunt satisfăcute.</li>
+<li><strong>Mecanismele de Evadare din Libertate:</strong> Atunci când alienarea și lipsa de securitate devin greu de suportat, oamenii folosesc trei mecanisme pentru a restabili securitatea, plătind prețul Eului: <strong>autoritarismul</strong> (sadism/masochism), <strong>tendința de distrugere</strong> și <strong>conformarea automată</strong> (pierderea în anonimatul lui &quot;ca oricare&quot;).</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">1. Sistemul / structura personalității</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">2. Care sunt mecanismele dezvoltării ontogenetice?</div>
+        <div class="answer markdown-body">
+          <p>Dezvoltarea personalității la Fromm este un proces prin care individul dobândește progresiv <strong>independență și libertate</strong>, ceea ce, paradoxal, duce la scăderea sentimentului de securitate.</p>
+<p><strong>Mecanismele dezvoltării ontogenetice includ:</strong></p>
+<ol>
+<li><strong>Ontogeneza repetă Filogeneza (în sens psihologic):</strong> Dezvoltarea personalității copilului repetă dezvoltarea societății omenești.</li>
+<li><strong>Ruperea de legăturile primare:</strong> Maxima securitate aparține perioadei de <strong>fuziune completă cu mama</strong>. Procesul de maturare (individuare) este însoțit de izolare și neajutorare.</li>
+<li><strong>Mecanismele de restabilire a securității (Evadarea din Libertate):</strong> Copilul încearcă să redobândească securitatea pierdută prin diverse forme de interacțiune cu părinții:<ul>
+<li><strong>Fuziunea simbiotică:</strong> Copilul se lasă &quot;înghițit&quot; (masochist) sau &quot;înghite&quot; (sadic) o altă persoană (părintele) pentru a restabili intimitatea și securitatea.</li>
+<li><strong>Evitarea</strong> și <strong>tendința de distrugere:</strong> Acțiuni care presupun distanțarea sau eliminarea obiectelor/persoanelor, fiind forme pasive sau active de relaționare cu părinții.</li>
+</ul>
+</li>
+<li><strong>Dragostea Productivă:</strong> Este forma cea mai dezirabilă de interacțiune, deoarece favorizează dezvoltarea Eului, printr-un <strong>echilibru între securitate și responsabilitate</strong>. Acest mecanism reduce nevoia de a evada din libertate.</li>
+</ol>
+<p>Deși Fromm considera că primii ani ai copilăriei sunt hotărâtori, el nu credea, spre deosebire de Freud, că personalitatea este formată definitiv la vârsta de cinci ani, ci că dezvoltarea <strong>continuă de-a lungul vieții</strong>.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">3. Argumentaţi originalitatea concepţiei lui Fromm despre dezvoltarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Originalitatea concepției lui Fromm despre dezvoltarea personalității (o dezvoltare psihosocială) este dată de punerea în centrul devenirii a <strong>dilemei existențiale umane</strong> și a factorilor socio-culturali:</p>
+<ol>
+<li><strong>Dilema fundamentală ca motor al dezvoltării:</strong> Fromm postulează că dezvoltarea este un efort de a gestiona conflictul inerent între <strong>libertate</strong> (care aduce singurătate și teamă) și <strong>securitate</strong>. Nevroza și inadaptarea sunt rezultatul eșecului de a suporta această libertate, ducând la evadarea în mecanisme precum conformarea automată sau autoritarismul.</li>
+<li><strong>Determinismul Socio-Cultural Radical:</strong> Fromm se distanțează radical de Freud, argumentând că <strong>pasiunile și angoasele omului sunt un produs cultural</strong> (Psihanaliza Culturalistă). Societatea nu are doar o funcție represivă (ca la Freud), ci și una <strong>creativă</strong>.</li>
+<li><strong>Dezvoltarea continuă și rolul Eului:</strong> Dezvoltarea personalității nu se încheie în primii cinci ani de viață (viziune opusă lui Freud). Individul adult este capabil să își aleagă drumul, posedând <strong>liber arbitru</strong>.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="2. Motivația umană|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">4. Argumentaţi concepţia lui Fromm despre motivaţia umană.</div>
+        <div class="answer markdown-body">
+          <p>Concepția lui Fromm despre motivație se bazează pe ideea că omul, fiind o ființă care a transcens natura, este ghidat de un set de <strong>trebuințe psihologice</strong> care sunt rezultatul condiției sale umane și al efortului de a se adapta la mediul social.</p>
+<ol>
+<li><strong>Motivația este Socială, nu Biologică:</strong> Fromm respinge ideea că forțele motivaționale sunt pulsii biologice inerente (ca la Freud), argumentând că <strong>cele mai frumoase și cele mai urâte înclinații ale omului rezultă din procesul social</strong>.</li>
+<li><strong>Motivația bazală (Trebuințe Psihologice):</strong> Motivația este orientată spre satisfacerea celor șase trebuințe psihologice: de <strong>apartenență</strong> (care ideal ar fi satisfăcută prin dragoste productivă), de <strong>transcendență</strong> (dorința de a-și depăși condiția), de <strong>înrădăcinare</strong> (nevoia de a se simți acasă în lume), de <strong>identitate</strong> (nevoia de a se simți unic), de <strong>repere/orientare</strong> și de <strong>stimulare</strong>.</li>
+<li><strong>Motivația de Creștere și Împlinire:</strong> Fromm susține că în fiecare individ există o <strong>tendință înnăscută spre creștere, dezvoltare a potențialului propriu, adevăr și dreptate</strong>. Această tendință funcționează ca o forță proactivă, similar cu impulsul de perfecționare de la Adler.</li>
+<li><strong>Motivația Patologică:</strong> Atunci când trebuințele nu-și găsesc împlinirea, rezultatul este <strong>boala mintală</strong>. Motivația nevrotică este centrată pe mecanisme de evadare din libertate (autoritarism, distrugere, conformism automat), care au ca scop <strong>restabilirea securității pierdute</strong>.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">2. Motivația umană</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|10. Concepte originale specifice fiecărei teorii|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">5. Analizaţi specificul tipurilor de personalitate şi relaţia lor cu motivaţia.</div>
+        <div class="answer markdown-body">
+          <p>Tipurile de personalitate la Fromm se bazează pe <strong>orientarea dominantă</strong> a individului față de sine și față de ceilalți. Aceste tipuri sunt împărțite în orientări <strong>neproductive</strong> (nevrotice) și <strong>productive</strong> (mature).</p>
+<p><strong>Tipurile Neproductive (Nevrotice) și Motivația lor (Securitatea Compulsivă):</strong>
+Aceste tipuri sunt modalități nesănătoase de relaționare, marcate de păstrarea unor patternuri defectuoase formate în relația cu părinții.</p>
+<ul>
+<li><strong>Tipul Receptiv:</strong> Așteaptă totul (dragoste, plăcere) de la surse exterioare. Motivația este <strong>dependentă</strong>; se simte neajutorat când trebuie să facă ceva singur.</li>
+<li><strong>Tipul Exploatativ:</strong> Dobândește ceea ce vrea prin <strong>forță sau viclenie</strong>. Motivația este centrată pe obținerea a ceea ce este valoros pentru ceilalți.</li>
+<li><strong>Tipul Posesiv:</strong> Acumulează bunuri, bani, emoții, izolându-se de ceilalți pentru a-și satisface <strong>tendința de securitate</strong>. Motivația este centrată pe conservatorism și cumpătare.</li>
+<li><strong>Tipul Prospectiv:</strong> Se orientează după ceea ce se cere pe piață, devenind o &quot;marfă&quot;. Motivația este <strong>conformitatea automată</strong>, plătind securitatea cu prețul Eului autentic și ducând la alienare.</li>
+</ul>
+<p><strong>Tipul Productiv (Matur) și Motivația sa (Creșterea și Împlinirea):</strong></p>
+<ul>
+<li><strong>Tipul Productiv:</strong> Reprezintă forma ideală de dezvoltare umană. Motivația este <strong>actualizarea potențialului</strong> și împlinirea prin <strong>iubirea productivă</strong> (implicând grijă, responsabilitate, cunoaștere, respect).</li>
+</ul>
+<p><strong>Notă:</strong> Adaptarea optimă se realizează printr-o combinație de trăsături productive și neproductive (de exemplu, agresivitate + productivitate = inițiativă).</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">10. Concepte originale specifice fiecărei teorii</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|9. Diferențe / asemănări între teorii|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">6. Analizaţi asemănările şi deosebirile dintre teoria lui Fromm şi teoria lui Freud în privinţa tipologiei personalităţii.</div>
+        <div class="answer markdown-body">
+          <table>
+<thead>
+<tr>
+<th align="left">Aspect Comparat</th>
+<th align="left">Erich Fromm (Tipuri de Orientare)</th>
+<th align="left">Sigmund Freud (Tipuri Psihosexuale)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Criteriul Tipologic</strong></td>
+<td align="left"><strong>Orientarea dominantă</strong> a individului în relația cu mediul social și cu sine.</td>
+<td align="left"><strong>Fixația libidinală</strong> pe o zonă erogenă și modul de rezolvare a conflictului psihosexual.</td>
+</tr>
+<tr>
+<td align="left"><strong>Cauza Tipului Nevrotic</strong></td>
+<td align="left"><strong>Factori socio-culturali</strong> (patternuri defectuoase de relaționare cu părinții, evadarea din libertate, alienarea).</td>
+<td align="left"><strong>Factori biologici</strong> (eșecul depășirii conflictului psihosexual în copilărie).</td>
+</tr>
+<tr>
+<td align="left"><strong>Analogii</strong></td>
+<td align="left">Fromm observă similarități: Tipul Receptiv seamănă cu cel Oral-incorporativ; Exploatativ cu Oral-agresiv; Posesiv cu Anal-retentiv.</td>
+<td align="left">Tipurile sunt Oral, Anal, Falic (nevrotice) și Genital (matur).</td>
+</tr>
+<tr>
+<td align="left"><strong>Baza Relației</strong></td>
+<td align="left">Relația dintre tipul nevrotic și realitatea socială este una de <strong>discordanță</strong>.</td>
+<td align="left">Relația este marcată de modalități de satisfacere asociate unui <strong>stadiu imatur</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Natura Trăsăturilor</strong></td>
+<td align="left">Trăsăturile pot fi <strong>productive sau neproductive</strong> (cu aspecte pozitive/negative).</td>
+<td align="left">Tipurile nevrotice sunt marcate de <strong>mecanisme de apărare iraționale</strong>.</td>
+</tr>
+</tbody></table>
+<p><strong>Deosebiri Esențiale:</strong> Baza tipologiei lui Fromm este <strong>socială și relațională</strong>, nu sexuală și biologică, ca la Freud.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">9. Diferențe / asemănări între teorii</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="5. Personalitatea matură|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">7. Prin ce se aseamănă şi prin ce diferă viziunea asupra personalităţii mature în teoria lui Fromm faţă de psihanaliza clasică şi faţă de psihologia feminină (K. Horney)?</div>
+        <div class="answer markdown-body">
+          <p>Personalitatea matură la Fromm este <strong>Tipul Productiv</strong>.</p>
+<p><strong>Asemănări:</strong></p>
+<ul>
+<li><strong>Față de Freud (Psihanaliza Clasică):</strong> Ambele teorii consideră că maturitatea presupune <strong>echilibru emoțional și buna funcționare în societate</strong>. Tipul Genital la Freud și Tipul Productiv la Fromm implică <strong>capacitatea de a iubi</strong> și de a avea relații autentice.</li>
+<li><strong>Față de Horney (Psihologia Feminină):</strong> Ambele se centrează pe <strong>factorii sociali</strong> și pe ideea că omul are o <strong>tendință înnăscută de creștere și împlinire a potențialului</strong>. Ambele asociază maturitatea cu o funcționare <strong>realistă și flexibilă</strong>.</li>
+</ul>
+<p><strong>Deosebiri:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Caracteristică</th>
+<th align="left">Fromm (Tipul Productiv)</th>
+<th align="left">Freud (Tipul Genital)</th>
+<th align="left">Horney (Personalitatea Normală)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Definiția Maturității</strong></td>
+<td align="left"><strong>Actualizarea potențialului</strong> și <strong>iubirea productivă</strong> (grijă, respect, responsabilitate).</td>
+<td align="left"><strong>Capacitatea de a munci și de a iubi</strong> (în sens sexual matur).</td>
+<td align="left"><strong>Funcționare flexibilă și echilibrată</strong> a tendințelor nevrotice; <strong>lipsa rigidității</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Motivația</strong></td>
+<td align="left">Motivația de <strong>creștere</strong> și <strong>amplificare a tensiunii</strong> (căutarea de noi scopuri).</td>
+<td align="left">Motivația de <strong>reducere a tensiunii</strong> (homeostazie) prin satisfacerea instinctelor.</td>
+<td align="left">Motivația de <strong>împlinire</strong> a potențialului propriu și <strong>fuga de anxietatea bazală</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Sursa Imaturității</strong></td>
+<td align="left"><strong>Alienarea</strong> și <strong>evadarea din libertate</strong> cauzată de presiunile sociale.</td>
+<td align="left"><strong>Fixații libidinale</strong> în copilărie.</td>
+<td align="left"><strong>Relații frustrante</strong> cu părinții.</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">5. Personalitatea matură</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="6. Viziunea despre natura umană|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">8. Evaluaţi viziunea lui Fromm despre natura umană şi argumentaţi orientarea sa.</div>
+        <div class="answer markdown-body">
+          <p>Viziunea lui Erich Fromm despre natura umană este <strong>optimistă</strong> și se încadrează în curentul <strong>neopsihanalitic culturalist</strong>.</p>
+<p><strong>Argumentarea Orientării:</strong></p>
+<ol>
+<li><strong>Omul ca ființă transcendentă:</strong> Fromm distinge omul de animal prin capacitatea de a fi <strong>conștient de sine</strong>, de a <strong>învăța</strong> și de a-și <strong>imagina lucruri inexistente</strong>. Deși supus naturii (corpului), omul este rupt de ea prin spirit.</li>
+<li><strong>Liber Arbitru și Rațiune:</strong> Fromm contrazice total determinismul pesimist al lui Freud, afirmând că omul este capabil de <strong>liber arbitru</strong>. Omul este guvernat de <strong>rațiune</strong> și nu de impulsuri oarbe. Individul are libertatea și responsabilitatea de a-și alege drumul.</li>
+<li><strong>Bontatea Inerentă:</strong> Omul este, în esența sa, <strong>bun</strong>, având <strong>tendințe înnăscute spre creștere, adevăr și dreptate</strong>. Dacă devine &quot;rău&quot;, acest lucru se întâmplă în măsura în care nu reușește să își dezvolte potențialul.</li>
+<li><strong>Orientarea Teleologică:</strong> Omul tinde să-și împlinească potențialitățile și să se perfecționeze continuu, o viziune care se apropie de concepțiile lui Adler și Maslow.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">6. Viziunea despre natura umană</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="7. Raportul ereditate–mediu|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">9. Încadraţi teoria în funcţie de concepţia sa asupra raportului ereditate–mediu şi a rolului fiecăruia în formarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Teoria lui Fromm se încadrează în categoria teoriilor care postulează o <strong>interacțiune biologic-socială</strong> sau, mai specific, în <strong>determinismul social/cultural</strong>, acordând rolul cel mai important factorilor de mediu.</p>
+<ul>
+<li><strong>Ereditatea (Biologicul):</strong> Este responsabilă pentru <strong>structura transcendentă</strong> (corp vs. spirit) și pentru <strong>tendința înnăscută de creștere, dezvoltare a potențialului propriu și de identitate</strong>. De asemenea, trebuința de stimulare este de natură fiziologică.</li>
+<li><strong>Mediul (Socialul/Cultura):</strong> Are rolul definitoriu. Societatea este cea care <strong>creează omul</strong> și determină <strong>pasiunile și angoasele</strong> sale. Cultura modelează indivizii și dezvoltă personalități care să se potrivească specificului ei istoric.</li>
+</ul>
+<p><strong>Rolul lor în formarea personalității:</strong>
+Structurarea personalității depinde de interacțiunile familiale și de modul în care societatea reușește să frustreze sau să satisfacă trebuințele psihologice ale omului. Deși există un impuls înnăscut spre creștere, acesta poate fi <strong>deformat</strong> de societate, care impune conformarea în detrimentul libertății.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">7. Raportul ereditate–mediu</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="8. Rolul educației|Fromm">
+        <div class="theorist">Fromm</div>
+        <div class="question">10. Care este locul şi rolul educaţiei, ca influenţă socială formativă, în această viziune?</div>
+        <div class="answer markdown-body">
+          <p>Educația, ca influență socială formativă, are un rol dual și contradictoriu în viziunea lui Fromm, deoarece societatea însăși are funcții opuse:</p>
+<ol>
+<li><strong>Rolul de Socializare și Conformare (Represiv):</strong> Educația modelează indivizii pentru a se <strong>potrivi specificului istoric și cultural al societății</strong>. Adesea, cultura și educația <strong>deformează</strong> omul, constrângându-l să se <strong>conformeze cerințelor sociale</strong> și frustrând astfel satisfacerea trebuinței naturale de împlinire a potențialului și de libertate.</li>
+<li><strong>Rolul Constructiv (Dragostea Autentică):</strong> Educația sănătoasă (în special cea parentală) ar trebui să fie bazată pe <strong>dragoste autentică</strong>. Rolul ei este de a-l învăța pe copil să își <strong>asume responsabilități</strong> și să <strong>nu se teamă de libertate</strong>.</li>
+<li><strong>Modelarea Relațiilor:</strong> Educația influențează formele de interacțiune ale copilului cu părinții (fuziune simbiotică, evitare, distrugere sau dragoste), care sunt esențiale pentru dezvoltarea personalității.</li>
+</ol>
+<p>Deși educația este o forță puternică, Fromm subliniază că, <strong>în ciuda presiunilor sociale spre conformare, omul dispune de liber arbitru</strong> și își poate împlini potențialul prin propria voință.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">8. Rolul educației</span><span class="tag">Fromm</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="1. Sistemul / structura personalității|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">1. În ce constă sistemul de personalitate la Murray?</div>
+        <div class="answer markdown-body">
+          <p>Henry Murray a introdus termenul de <strong>personologie</strong> pentru a desemna ramura psihologiei care se ocupă cu studiul personalității. Sistemul său de personalitate este structural, dinamic și se bazează pe patru principii fundamentale, păstrând, în mare măsură, topica freudiană din modelul structural.</p>
+<p><strong>Principiile fundamentale ale personologiei:</strong></p>
+<ol>
+<li><strong>Principiul dependenței proceselor psihologice de cele fiziologice:</strong> Nu există personalitate fără creier, deoarece fiziologia cerebrală guvernează personalitatea.</li>
+<li><strong>Principiul trebuinței de inducere a tensiunii:</strong> Omul tinde să-și inducă tensiuni, deoarece procesul însuși de reducere a lor îi produce plăcere, având nevoie permanentă de stimulare, activitate și progres.</li>
+<li><strong>Principiul naturii longitudinale a personalității:</strong> Personalitatea se dezvoltă continuu de-a lungul vieții, construcția sa depinzând de evenimentele trăite.</li>
+<li><strong>Principiul unicității:</strong> Deși există similarități între oameni, fiecare individ este unic.</li>
+</ol>
+<p><strong>Componentele structurale ale personalității (Modelul inspirat de Freud):</strong></p>
+<ul>
+<li><strong>Sinele (Id):</strong> Este rezervorul tuturor impulsurilor înnăscute și furnizează energia și direcționarea comportamentului. Spre deosebire de Freud, Sinele conține nu doar impulsuri primitive amorale, ci și pe cele <strong>socialmente dezirabile</strong>, cum ar fi empatia, dragostea și tendința de a stăpâni mediul.</li>
+<li><strong>Supraeul (Superego):</strong> Constituie <strong>cultura, valorile și normele internalizate</strong>, care acționează ca evaluator al conduitei. Conținutul Supraeului include influențele grupului de copii, ale literaturii și mitologiei.</li>
+<li><strong>Idealul Eului (Ego-ideal):</strong> Se dezvoltă în paralel cu Supraeul și conține <strong>aspirațiile cele mai înalte ale omului</strong> și direcțiile de dezvoltare pentru auto-perfecționare.</li>
+<li><strong>Eul (Ego):</strong> Este <strong>stăpânul rațional</strong> al existenței. Eul planifică acțiunile și caută oportunitățile de satisfacere a trebuințelor, având rolul de a media conflictele dintre Sine și Supraeu, dar Murray nu considera aceste conflicte ca fiind inevitabile. Eul nu are doar o funcție defensivă, ci și aceea de a produce plăcere.</li>
+</ul>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">1. Sistemul / structura personalității</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">2. Argumentaţi originalitatea concepţiei lui Murray despre dezvoltarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Concepția lui Murray despre dezvoltarea personalității este originală prin modul în care integrează elemente freudiene (importanța copilăriei mici) cu o perspectivă longitudinală și cu introducerea unor concepte noi legate de stadialitatea psihosexuală.</p>
+<ol>
+<li><strong>Dezvoltarea Longitudinală:</strong> Murray a susținut <strong>principiul naturii longitudinale a personalității</strong>, afirmând că personalitatea se dezvoltă continuu de-a lungul vieții, o viziune care îl apropie de Erikson. Deși acordă o mare importanță primei copilării (similar cu Freud), el considera că dezvoltarea nu se oprește la vârsta de cinci ani.</li>
+<li><strong>Extinderea Stadialității Psihosexuale:</strong> Murray pornește de la modelul freudian (oral, anal, falic, etc.), dar <strong>extinde numărul stadiilor la cinci</strong>, introducând <strong>două complexe originale</strong> care își pun amprenta inconștient asupra dezvoltării ulterioare:<ul>
+<li><strong>Complexul claustral</strong> (legat de experiența intrauterină).</li>
+<li><strong>Complexul uretral</strong> (asociat cu ambiția excesivă și stima de sine distorsionată).</li>
+</ul>
+</li>
+<li><strong>Viziunea Modificată asupra Sinelui:</strong> Spre deosebire de Freud, Murray consideră că Sinele nu este doar sursa impulsurilor primitive amorale, ci conține și <strong>impulsuri socialmente dezirabile</strong> (empatie, dragoste).</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|9. Diferențe / asemănări între teorii|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">3. Analizaţi asemănările şi deosebirile dintre teoria lui Murray şi teoria lui Freud în privinţa tipologiei personalităţii (criterii tipologice şi tipuri de personalitate).</div>
+        <div class="answer markdown-body">
+          <p>Murray, fiind un discipol tardiv al psihanalizei, a preluat și extins tipologia lui Freud:</p>
+<p><strong>Asemănări:</strong></p>
+<ol>
+<li><strong>Criteriul Tipologic:</strong> Ambele teorii folosesc același criteriu principal: <strong>modul în care se produc sau nu fixații libidinale</strong> pe stadiile de dezvoltare psihosexuală.</li>
+<li><strong>Natura Tipului Nevrotic:</strong> Tipologia nevrotică este rezultatul <strong>investirii libidinale excesive</strong> într-un stadiu infantil și al utilizării mecanismelor de apărare specifice acelui stadiu pentru reducerea anxietății.</li>
+<li><strong>Tipurile Comune:</strong> Ambele includ tipuri de personalitate orală, anală și falică.</li>
+<li><strong>Tipul Matur:</strong> Tipul matur (normal) este caracterizat de depășirea stadiilor și de funcționarea fără mecanisme de apărare iraționale ale eului.</li>
+</ol>
+<p><strong>Deosebiri:</strong>
+| Aspect Comparat | Henry Murray | Sigmund Freud |
+| :--- | :--- | :--- |
+| <strong>Numărul Stadiilor/Complexelor</strong> | Cinci stadii: include complexul <strong>claustral</strong> și <strong>uretral</strong> (complexul lui Icar). | Trei stadii determinante: oral, anal, falic, urmate de stadiul de latență și genital. |
+| <strong>Complexul de Castrare</strong> | Îi dă un sens mai larg, legat de <strong>pedepsele părintești</strong> asociate activității masturbatorie infantile, fiind mai puțin cauzativ. | Este central pentru rezolvarea Complexului Oedip/Electra și etiologia nevrozelor. |
+| <strong>Natura Eului și a Sinelui</strong> | Sinele conține și <strong>impulsuri socialmente dezirabile</strong> (empatie, dragoste). Eul are și o funcție de a produce plăcere. | Sinele este rezervorul impulsurilor primitive amorale. Eul este preponderent un <strong>servitor defensiv</strong>. |</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">9. Diferențe / asemănări între teorii</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">4. Marcaţi specificul tipurilor de personalitate în viziunea lui Murray.</div>
+        <div class="answer markdown-body">
+          <p>Specificul tipurilor de personalitate la Murray este dat de <strong>complexul dominant</strong> care direcționează inconștient dezvoltarea ulterioară. Aceste complexe sunt forme extreme de fixație pe modalitatea specifică de satisfacere libidinală a fiecărui stadiu.</p>
+<p><strong>Tipurile de personalitate specifice lui Murray (adăugate modelului freudian):</strong></p>
+<ol>
+<li><strong>Tipul Claustral:</strong> Derivat din complexul claustral, asociat experienței intrauterină. Poate avea trei forme:<ul>
+<li><em>Complexul claustral simplu:</em> Dorința de a fi protejat, de a rămâne în locuri calde, liniștite, întunecate, pasivitate.</li>
+<li><em>Complexul de evadare:</em> Frica de a rămâne îngropat, claustrofobie, tendința de a evada din orice situație restrictivă.</li>
+<li><em>Complexul de neajutorare:</em> Sentimentul că nu se poate descurca singur, căutarea unui ajutor necondiționat.</li>
+</ul>
+</li>
+<li><strong>Tipul Uretral (Complexul lui Icar):</strong> Asociat cu <strong>ambiție excesivă</strong>, stimă de sine distorsionată, enurezis în antecedente și egoism. Persoana țintește prea sus (ca Icar), ceea ce o duce spre eșec.</li>
+</ol>
+<p>Tipurile nevrotice (claustral, oral, anal, uretral, de castrare) reduc anxietatea utilizând <strong>mecanisme specifice stadiului respectiv</strong>.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="2. Motivația umană|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">5. Care sunt elementele originale ale viziunii lui Murray asupra motivaţiei?</div>
+        <div class="answer markdown-body">
+          <p>Contribuția cea mai importantă a lui Murray la teoria personalității este conceptul de <strong>trebuință</strong> ca bază explicativă a motivației și direcționării comportamentului (Personologia).</p>
+<p>Elementele originale ale viziunii lui Murray asupra motivației sunt:</p>
+<ol>
+<li><strong>Principiul Trebuinței de Inducere a Tensiunii:</strong> Murray contrazice principiul reducerii tensiunii al lui Freud, susținând că omul <strong>tinde să-și inducă tensiuni</strong> (o stare de tensiune crescută) pentru că plăcerea derivă din <strong>procesul de reducere a lor</strong>, nu din starea de non-tensiune. Omul are nevoie permanentă de stimulare și progres.</li>
+<li><strong>Pluralismul Motivațional (Lista Trebuințelor Psihogene):</strong> Murray a identificat o listă de <strong>20 de trebuințe specific umane (psihogene)</strong>, majoritatea fiind de natură socială, cum ar fi dominanța, afilierea, realizarea, jocul și înțelegerea. Această listă se distinge de accentul exclusiv al lui Freud pe Libidoul sexual.</li>
+<li><strong>Conceptul de &quot;Temă&quot; (Tema Unificatoare):</strong> Combinația unică dintre trebuințele preexistente și cele generate sub influența presiunilor externe (mediu) creează o <strong>configurație motivațională unică numită temă</strong>, care conferă coerență comportamentului individual.</li>
+<li><strong>Vectorul-Valoare:</strong> Murray a introdus târziu conceptul de <strong>vector-valoare</strong> (vectorul fiind direcția și intensitatea imboldului, iar valoarea fiind idealul individului) pentru a oferi o descriere obiectivă a comportamentelor, înlocuind trebuințele.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">2. Motivația umană</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="5. Personalitatea matură|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">6. Prin ce se aseamănă şi prin ce diferă viziunea asupra personalităţii mature în teoria lui Murray faţă de psihanaliza clasică şi faţă de teoriile celorlalţi neopsihanalişti?</div>
+        <div class="answer markdown-body">
+          <p>Personalitatea matură la Murray este caracterizată de funcționarea fără mecanisme de apărare iraționale.</p>
+<p><strong>Asemănări:</strong></p>
+<ul>
+<li><strong>Față de Freud (Psihanaliza Clasică):</strong> Ambele teorii consideră că personalitatea matură presupune <strong>absența apărărilor iraționale ale eului</strong>, capacitatea de a munci, de a iubi și de a funcționa plenar în societate.</li>
+<li><strong>Față de Neopsihanaliști (Adler, Horney, Fromm):</strong> Murray, la fel ca și ceilalți neopsihanaliști, consideră că individul poate interveni voluntar în propria sa schimbare, nu este un prizonier rigid al trecutului. Toți pun accent pe <strong>buna funcționare în societate</strong>.</li>
+</ul>
+<p><strong>Deosebiri:</strong>
+| Caracteristică | Murray (Personologia) | Freud (Psihanaliza Clasică) | Adler/Fromm/Horney (Neopsihanaliza) |
+| :--- | :--- | :--- | :--- |
+| <strong>Motivația Centrală</strong> | Plăcerea derivă din <strong>procesul de reducere a tensiunii</strong> (inducerea tensiunii). | Scopul unic este <strong>reducerea tensiunii</strong> (homeostazie) prin satisfacerea imediată a pulsiunilor. | <strong>Motivația de creștere/împlinire</strong> (superioritate la Adler, actualizare la Horney/Fromm) și <strong>amplificarea tensiunii</strong> (Adler). |
+| <strong>Rolul Sinelui</strong> | Sinele conține impulsuri <strong>socialmente dezirabile</strong> (dragoste, empatie). | Sinele este sursa forțelor <strong>oarbe, animalice</strong>. | Nu folosesc conceptul de Sine în sensul freudian (Adler) sau îl redefinesc ca ideal de integrare (Jung). |
+| <strong>Dezvoltarea</strong> | Natură <strong>longitudinală</strong> (pe tot parcursul vieții). | Se încheie în <strong>primii 5 ani de viață</strong> (determinism rigid). | Longitudinală (Jung, Erikson) sau continuă (Adler, Horney, Fromm). |</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">5. Personalitatea matură</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="10. Concepte originale specifice fiecărei teorii|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">7. Ce influenţă au exercitat principiile pe care le-a enunţat el în domeniul personologiei asupra dezvoltării altor teorii?</div>
+        <div class="answer markdown-body">
+          <p>Principiile și conceptele enunțate de Murray au exercitat o influență semnificativă asupra dezvoltării altor teorii, în special în domeniul motivației și al personologiei (studiul personalității).</p>
+<ol>
+<li><strong>Dezvoltarea Teoriei Motivației:</strong> Conceptele sale de <strong>motivație de realizare, motivație de afiliere și motivație de putere</strong> au fost preluate și amplu dezvoltate de teoreticieni ulteriori, precum McClelland, Winter și McAdams.</li>
+<li><strong>Instrumente de Evaluare:</strong> Murray, împreună cu C. Morgan, a creat <strong>Testul de Apercepție Tematică (TAT)</strong>, un test proiectiv utilizat și astăzi. De asemenea, metodele de evaluare a personalității, cum ar fi <strong>testele situaționale</strong>, utilizate de Murray în timpul războiului, sunt folosite și acum în centrele de evaluare.</li>
+<li><strong>Personologia (Studiul Personalității):</strong> Murray este cel care a dat un nume domeniului personalității (Personologia) și a contribuit la dezvoltarea studiului <strong>personalității normale</strong>.</li>
+<li><strong>Motivația de Inducere a Tensiunii:</strong> Principiul său de inducere a tensiunii a influențat viziunea altor teoreticieni care au respins modelul homeostatic al lui Freud, cum ar fi Maslow (metamotivația) și Adler (străduința spre superioritate).</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">10. Concepte originale specifice fiecărei teorii</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="6. Viziunea despre natura umană|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">8. Evaluaţi viziunea lui Murray despre natura umană şi argumentaţi orientarea sa.</div>
+        <div class="answer markdown-body">
+          <p>Viziunea lui Murray despre natura umană este una <strong>optimistă moderată</strong>. Deși teoria sa păstrează o structură freudiană, el o modifică, eliminând pesimismul rigid.</p>
+<p><strong>Argumentarea Orientării:</strong></p>
+<ol>
+<li><strong>Autodeterminare și Creativitate:</strong> Omul este capabil de <strong>creativitate și rațiune</strong>. Murray credea că omul poate <strong>interveni voluntar în propria lui schimbare</strong>. Nu suntem prizonierii trecutului nostru sau ai primelor experiențe.</li>
+<li><strong>Motivație de Creștere:</strong> Deși Murray consideră că scopul final este reducerea tensiunii, plăcerea este dată de <strong>procesul reducerii tensiunii</strong> și de <strong>progres</strong> (inducerea tensiunii).</li>
+<li><strong>Sinele Social:</strong> Spre deosebire de viziunea pesimistă a lui Freud, Murray consideră că Sinele conține și <strong>pulsiuni socialmente acceptabile</strong> (tendința spre empatie, dragoste). Conflictele dintre Sine și Supraeu nu sunt inevitabile.</li>
+</ol>
+<p>Murray se înscrie, la fel ca Horney și Fromm, în grupul <strong>neopsihanaliștilor cu viziune moderat optimistă</strong>.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">6. Viziunea despre natura umană</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="7. Raportul ereditate–mediu|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">9. Încadraţi teoria în funcţie de concepţia sa asupra raportului ereditate–mediu şi a rolului fiecăruia în formarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Teoria lui Murray se bazează pe <strong>interacțiunea ereditate-mediu</strong>, luând în considerare atât elemente biologice, cât și sociale și culturale.</p>
+<ul>
+<li><strong>Ereditatea (Biologicul):</strong> Are un rol important, fiind responsabilă pentru <strong>fiziologia cerebrală</strong> care guvernează personalitatea (<strong>Principiul dependenței proceselor psihologice de cele fiziologice</strong>). De asemenea, este responsabilă pentru <strong>impulsurile înnăscute</strong> din Sine.</li>
+<li><strong>Mediul (Socialul/Cultura):</strong> Are un rol semnificativ în formarea personalității. Forma și conținutul <strong>Supraeului</strong> și al <strong>Idealului Eului</strong> sunt impuse de adulți și de mediul apropiat în prima copilărie. Factorii de mediu (presiunile) influențează dezvoltarea unor trebuințe specifice care se manifestă imperios la vârsta adultă.</li>
+</ul>
+<p><strong>Rolul lor în formarea personalității:</strong>
+Deși personalitatea este parțial determinată de instincte și parțial de mediu, Murray subliniază că experiențele actuale și intențiile de viitor (scopurile) au o influență mare asupra funcționării personalității, ceea ce sugerează că <strong>omul nu este prizonierul exclusiv al eredității sau al experiențelor timpurii</strong>.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">7. Raportul ereditate–mediu</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="8. Rolul educației|Murray">
+        <div class="theorist">Murray</div>
+        <div class="question">10. Care este locul şi rolul educaţiei, ca influenţă socială formativă, în această viziune?</div>
+        <div class="answer markdown-body">
+          <p>Deși sursa nu detaliază extensiv rolul educației, din perspectiva lui Murray, educația, ca influență socială formativă, joacă un rol esențial în structurarea normelor și în direcționarea impulsurilor Sinelui.</p>
+<ol>
+<li><strong>Formarea Supraeului și a Idealului Eului:</strong> Educația, prin intermediul adulților din mediul apropiat în prima copilărie, impune <strong>forma și conținutul Supraeului</strong> (valorile și normele internalizate) și contribuie la dezvoltarea <strong>Idealului Eului</strong> (aspirațiile de auto-perfecționare).</li>
+<li><strong>Reglarea Impulsurilor:</strong> Deoarece Eul nu are doar un rol represiv (ca la Freud), ci și unul de a organiza și direcționa exprimarea impulsurilor acceptabile social, educația este esențială pentru a modela Sinele (care conține și pulsiuni dezirabile), astfel încât individul să funcționeze adaptativ.</li>
+<li><strong>Reducerea Anxietății:</strong> Un Supraeu și un Ideal al Eului sănătoase, formate sub influența educației, ajută la medierea conflictelor cu Sinele și cu realitatea, reducând astfel anxietatea, deși conflictele nu sunt considerate inevitabile.</li>
+</ol>
+<p>În ansamblu, educația este parte din presiunea socială (presiunea alfa și beta) care modelează și direcționează trebuințele individului, structurând astfel tema unificatoare a personalității.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">8. Rolul educației</span><span class="tag">Murray</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="1. Sistemul / structura personalității|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">1. În ce constă sistemul de personalitate la Allport?</div>
+        <div class="answer markdown-body">
+          <p>Sistemul de personalitate la Allport este o <strong>organizare dinamică</strong> în cadrul individului a unor <strong>sisteme psihofiziologice</strong> care determină <strong>gândirea și comportamentul său caracteristic</strong>. Teoria sa este o abordare structurală și funcțională a personalității, concentrându-se pe <strong>trăsături</strong> și <strong>dispoziții personale</strong> ca structuri interne stabile și permanente.</p>
+<p><strong>Componentele cheie ale sistemului (Structura) sunt:</strong></p>
+<ol>
+<li><strong>Trăsăturile de personalitate (Predispoziții):</strong> Acestea sunt <strong>structuri neuropsihice generalizate</strong> și <strong>reale</strong>, care există la nivel psihic ca <strong>structuri stabile</strong>. Ele nu sunt simple constructe teoretice sau etichete, ci <strong>determină sau cauzează comportamentul</strong>. Trăsăturile sunt organizate în configurații consistente, având grade diferite de generalitate (cardinale, centrale, secundare).</li>
+<li><strong>Proprium-ul (Eul Matur):</strong> Reprezintă <strong>miezul personalității</strong> și <strong>conștiința de sine achiziționată treptat</strong>. Este structura care gestionează funcționarea persoanei. <strong>Proprium-ul</strong> înlocuiește termenul de Eu și este constituit din interese, sentimente, valori, atitudini, intenții, imagine de sine și stil de viață, fiind <strong>unic și original</strong> pentru fiecare individ.</li>
+<li><strong>Sisteme Psihofiziologice:</strong> Personalitatea reunește inextricabil <strong>aspecte fiziologice</strong> (nervos și endocrin) și <strong>psihologice</strong>.</li>
+</ol>
+<p><strong>Funcționarea sistemului:</strong>
+Personalitatea este o <strong>organizare dinamică</strong>, adică se dezvoltă și se schimbă permanent prin integrarea aspectelor intelectuale și a deprinderilor. Comportamentul este întotdeauna <strong>caracteristic</strong> și depinde de sistemele psihofiziologice unice ale fiecărui individ.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">1. Sistemul / structura personalității</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="2. Motivația umană|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">2. Argumentaţi rolul motivaţiei în funcţionarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Rolul motivației în funcționarea personalității la Allport este fundamental și se distinge clar de teoriile anterioare (precum psihanaliza clasică) prin conceptele de <strong>contemporaneitate a motivelor</strong> și <strong>autonomie funcțională</strong>.</p>
+<ol>
+<li><strong>Contemporaneitatea Motivației:</strong> Motivele care determină comportamentul actual al adultului sunt <strong>motive prezente (contemporane)</strong>. <strong>Trecutul este mort</strong>, iar motivele infantile nu pot explica comportamentele actuale ale adultului. În raport cu comportamentul, <strong>toate motivele sunt primare</strong>, deoarece ele provoacă direct comportamentul.</li>
+<li><strong>Autonomia Funcțională a Motivelor:</strong> La vârsta adultă, motivele sunt <strong>funcțional autonome</strong>, fiind variate, sistemice și autosusținute. Ele derivă din sistemele motivaționale infantile, dar sunt <strong>funcțional independente</strong> de acestea. De exemplu, munca, inițial motivată de nevoi economice, devine autosusținută.</li>
+<li><strong>Impulsul de Creștere și Amplificarea Tensiunii:</strong> Mecanismele motivaționale cele mai importante <strong>nu acționează în sensul reducerii tensiunii</strong> (homeostazie, ca la Freud), ci al <strong>amplificării ei</strong> și al <strong>căutării de noi tensiuni</strong>. <strong>Impulsul spre creștere, unitate, unicitate, autonomie</strong> este inerent naturii umane.</li>
+<li><strong>Rolul Eului (Proprium-ului):</strong> <strong>Imaginea de sine</strong> și <strong>stilul de viață</strong> (care fac parte din Proprium) au o puternică <strong>funcție motivațională</strong> deoarece unifică raporturile persoanei cu viața. Toate motivele funcțional autonome sunt <strong>&quot;propriate&quot;</strong> și <strong>ancorate în Eu</strong>.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">2. Motivația umană</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">3. Identificaţi în teoria lui Allport mecanismele şi determinanţii dezvoltării ontogenetice.</div>
+        <div class="answer markdown-body">
+          <p>Dezvoltarea personalității la Allport este un proces continuu, axat pe <strong>elaborarea Eului</strong> (Proprium-ului).</p>
+<p><strong>Determinantul Principal al Dezvoltării:</strong></p>
+<ul>
+<li><strong>Structurarea cunoștințelor despre sine și lume</strong> și a trăirilor afective și atitudinale asociate lor.</li>
+</ul>
+<p><strong>Mecanismele Dezvoltării:</strong></p>
+<ol>
+<li><strong>Prelucrarea Culturală a Datului Ereditar:</strong> Personalitatea rezultă din interacțiunea potențialului ereditar (somatic, temperament, inteligență) cu factorii de mediu.</li>
+<li><strong>Internalizarea Progresivă a Modelelor Culturale (Enculturație):</strong> Dezvoltarea implică asimilarea modurilor de a fi și de a se comporta, prestabilite social. Procesul include: <strong>imitare, revoltă</strong> și, în final, <strong>asimilarea modelului</strong> într-o manieră personalizată.</li>
+<li><strong>Funcționarea Proprium-ului:</strong> Dezvoltarea se realizează prin structurarea progresivă a Proprium-ului în șapte stadii: <strong>Eul corporal</strong> (primul an), <strong>Identitatea de sine</strong> (anul doi), <strong>Respectul de sine</strong> (anul trei), <strong>Extensia Eului</strong> și <strong>Imaginea Eului</strong> (4-6 ani), și <strong>Efortul personal central</strong> (adolescența).</li>
+</ol>
+<p><strong>Stadiile dezvoltării Eului (Proprium-ului):</strong>
+Stadialitatea la Allport este legată de dezvoltarea capacităților cognitive:</p>
+<ul>
+<li><strong>1. Eul corporal (Anul 1):</strong> Primele impresii senzoriale (căldură/frig) legate de propriul corp.</li>
+<li><strong>2. Identitatea de sine (Anul 2):</strong> Conștientizarea păstrării identității de-a lungul timpului, susținută de dezvoltarea memoriei și a limbajului.</li>
+<li><strong>3. Respectul de sine (Anul 3):</strong> Conștientizarea independenței, opunere la controlul adulților prin negativism.</li>
+<li><strong>4. Extensia Eului și Imaginea Eului (4–6 ani):</strong> Lumea este văzută ca o prelungire a persoanei (egocentrism); se conturează o primă concepție despre sine prin reflectarea așteptărilor sociale.</li>
+<li><strong>5. Eul ca Rațional Agent (6–12 ani):</strong> Dezvoltarea capacităților cognitive.</li>
+<li><strong>6. Efortul Personal Central (Adolescența):</strong> Căutarea identității, experimentarea rolurilor, orientarea imaginii de sine spre ideal și viitor (profesie).</li>
+<li><strong>7. Proprium-ul (Maturitatea):</strong> Integrarea finală a tuturor aspectelor Eului.</li>
+</ul>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">4. Argumentaţi relaţiile dintre trăsătură şi comportament</div>
+        <div class="answer markdown-body">
+          <p>Relația dintre trăsătură și comportament este una de <strong>determinism cauzal</strong>.</p>
+<ol>
+<li><strong>Trăsăturile cauzează Comportamentul:</strong> Trăsăturile de personalitate nu apar doar ca reacție la stimuli (ca la behaviorism), ci <strong>există în permanență</strong> și <strong>determină sau cauzează comportamentul</strong>. Sistemele psihofiziologice (trăsăturile latente) <strong>motivează și/sau direcționează gândirea, trăirile și activitatea</strong> atunci când intră în funcțiune, fiind considerate <strong>tendințe determinative</strong>.</li>
+<li><strong>Trăsăturile sunt indicatori ai Comportamentului Consistent:</strong> Deși trăsăturile în sine nu pot fi văzute, existența și natura lor poate fi demonstrată empiric prin evaluarea <strong>consistenței și coerenței comportamentelor</strong> în timp și în situații diferite. Actele (comportamentele) care se <strong>repetă cu regularitate</strong> în situații diverse pot fi considerate indicatori ai trăsăturilor.</li>
+<li><strong>Comportamentul ca Expresie a Trăsăturii:</strong> Trăsăturile definesc <strong>modul caracteristic</strong> în care individul gândește și se comportă. Trăsăturile pot fi privite ca <strong>serii de comportamente posibile</strong> care sunt activate diferit în funcție de cerințele situației.</li>
+</ol>
+<p>Comportamentul are, de asemenea, două laturi distincte: <strong>comportamentul de înfruntare</strong> (ceea ce face persoana – conținutul) și <strong>comportamentul expresiv</strong> (cum face acel lucru – aspectul stilistic, care poartă pecetea individualității).</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">5. Argumentaţi originalitatea concepţiei lui Allport despre dezvoltarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Originalitatea lui Allport provine din contrastul viziunii sale cu psihanaliza clasică, prin care a mutat accentul pe <strong>autonomia Eului</strong> și pe <strong>orientarea spre viitor</strong>.</p>
+<ol>
+<li><strong>Discontinuitatea Dezvoltării (Trecutul este Mort):</strong> Allport postulează o <strong>discontinuitate</strong> (ruptură) între personalitatea adultului și cea a copilului. Personalitatea adultului <strong>nu mai este condiționată de trecut</strong> și <strong>conflictele copilăriei nu influențează funcționarea personalității mature</strong>.</li>
+<li><strong>Axarea pe Eul Conștient (Proprium):</strong> Spre deosebire de Freud, care se concentra pe Sinele inconștient, Allport vede dezvoltarea personalității ca un proces de <strong>evoluție și integrare progresivă a Eului (Proprium-ului)</strong>, guvernat de <strong>conștiență</strong> și <strong>rațiune</strong>.</li>
+<li><strong>Maturitatea ca Autonomie Funcțională:</strong> Mecanismul central al motivației adulte, <strong>autonomia funcțională</strong>, este independent de motivele infantile sau biologice. Personalitatea matură este <strong>post-instinctuală</strong>.</li>
+<li><strong>Orientarea Proactivă și Teleologică:</strong> Conduita omului este <strong>proactivă, intențională</strong> și unică. Intențiile de viitor (scopurile) structurează personalitatea.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|9. Diferențe / asemănări între teorii|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">6. Analizaţi asemănările şi deosebirile dintre teoria lui Allport şi teoriile psihanalitică şi neopsihanalitice în privinţa tipologiei personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Teoria lui Allport face parte din <strong>Teoriile Trăsăturilor</strong>, care nu propun tipologii clasice de personalitate, ci se concentrează pe <strong>configurația particulară a trăsăturilor comune</strong>.</p>
+<p><strong>Asemănări:</strong></p>
+<ul>
+<li>Allport recunoaște existența unor <strong>trăsături comune</strong> oamenilor din aceeași societate sau epocă istorică, datorită influențelor culturale uniforme.</li>
+<li>Allport admite că nevroza este o reflectare a unei <strong>centrări necontrolate asupra Eului</strong>, iar personalitatea nevrotică este una <strong>infantilă, incomplet dezvoltată</strong> și dominată de <strong>funcționarea oportunistă a Eului</strong>.</li>
+</ul>
+<p><strong>Deosebiri Esențiale:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Aspect Comparat</th>
+<th align="left">Allport (Teoria Trăsăturilor)</th>
+<th align="left">Psihanaliza/Neopsihanalizele</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Criteriul Tipologic</strong></td>
+<td align="left">Nu folosește criterii tipologice, ci <strong>configurația trăsăturilor comune</strong> (abordare <strong>idiografică</strong>).</td>
+<td align="left">Baza tipologiei este <strong>fixația libidinală</strong> (Freud, Murray) sau <strong>orientarea socială</strong> (Adler, Horney, Fromm).</td>
+</tr>
+<tr>
+<td align="left"><strong>Natura Trăsăturilor</strong></td>
+<td align="left">Trăsăturile sunt <strong>reale</strong> și <strong>cauzează</strong> comportamentul.</td>
+<td align="left">Tipul de personalitate este marcat de <strong>mecanisme de apărare iraționale</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Tipurile Postulate</strong></td>
+<td align="left">Nu propune tipuri de personalitate (precum oral, anal, falic, compliant, agresiv, receptiv). Face doar distincția între <strong>matur (Propriat)</strong> și <strong>imatur (Oportunist)</strong>.</td>
+<td align="left">Tipuri specifice (oral, anal, falic la Freud; dominator, dependent, evitant la Adler; compliant, agresiv, detașat la Horney).</td>
+</tr>
+<tr>
+<td align="left"><strong>Orientarea Motivației</strong></td>
+<td align="left"><strong>Autonomie funcțională</strong> (centrare pe viitor/creștere).</td>
+<td align="left"><strong>Instincte/reducerea tensiunii</strong> (Freud) sau <strong>trebuințe sociale/securitate</strong> (Horney, Fromm).</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">9. Diferențe / asemănări între teorii</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|10. Concepte originale specifice fiecărei teorii|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">7. Comparaţi trăsătura de personalitate comună şi cea individuală (dispoziţie personală).</div>
+        <div class="answer markdown-body">
+          <p>Allport a făcut o distincție clară între cele două concepte:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Caracteristică</th>
+<th align="left">Trăsătura Comună (Trăsătură)</th>
+<th align="left">Trăsătura Individuală (Dispoziție Personală)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Definiție</strong></td>
+<td align="left">O categorie pentru clasificarea formelor funcțional echivalente de comportament dintr-o <strong>populație generală</strong> de oameni.</td>
+<td align="left">O <strong>structură neuropsihică generalizată</strong> (specifică individului), având capacitatea de a interpreta mulți stimuli echivalenți și de a iniția forme constante de comportament <strong>adaptativ și stilistic</strong>.</td>
+</tr>
+<tr>
+<td align="left"><strong>Comunalitate</strong></td>
+<td align="left">Este prezentă la <strong>toți oamenii</strong> (datorită naturii umane și culturii comune), dar în grade variate.</td>
+<td align="left">Este <strong>specifică individului</strong> (unică).</td>
+</tr>
+<tr>
+<td align="left"><strong>Utilizare (Abordare)</strong></td>
+<td align="left">Este o unitate de analiză cu un grad acceptabil de abstractizare care permite <strong>comparații, diferențieri și categorizări între indivizi (nomotetic)</strong>.</td>
+<td align="left">Permite <strong>cunoașterea reală a personalității</strong> (abordare <strong>idiografică</strong>), dar nu se pretează la distribuții statistice.</td>
+</tr>
+<tr>
+<td align="left"><strong>Manifestare</strong></td>
+<td align="left">Reflectă moduri similare de adaptare la mediu.</td>
+<td align="left">Modul particular și unic în care se manifestă trăsătura comună la nivel individual.</td>
+</tr>
+<tr>
+<td align="left"><strong>Nomenclatură</strong></td>
+<td align="left">Ulterior, Allport a sugerat ca termenul de trăsătură să fie folosit doar pentru aceasta.</td>
+<td align="left">Ulterior, Allport a sugerat termenul de <strong>dispoziție personală</strong>.</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">10. Concepte originale specifice fiecărei teorii</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="5. Personalitatea matură|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">8. Prin ce se aseamănă şi prin ce diferă viziunea asupra personalităţii mature în teoria lui Allport faţă de psihanaliza clasică şi faţă de teoriile celorlalţi neopsihanalişti?</div>
+        <div class="answer markdown-body">
+          <p>Personalitatea matură la Allport este definită prin <strong>funcționarea propriată a Eului (Proprium-ului)</strong>.</p>
+<p><strong>Asemănări:</strong></p>
+<ul>
+<li><strong>Față de Freud și Neopsihanaliști:</strong> Normalitatea este asimilată cu <strong>echilibrul emoțional</strong> și <strong>buna funcționare în societate</strong>.</li>
+</ul>
+<p><strong>Deosebiri:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Caracteristică</th>
+<th align="left">Allport (Maturitate Propriată)</th>
+<th align="left">Freud (Psihanaliza Clasică)</th>
+<th align="left">Neopsihanaliști (Adler, Horney, Fromm)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Criteriul Maturității</strong></td>
+<td align="left"><strong>Funcționarea propriată a Eului</strong>; <strong>Autonomia funcțională</strong> a motivelor; unitatea de funcționare și <strong>perceperea realistă</strong> de sine și de lume.</td>
+<td align="left"><strong>Tipul Genital</strong>; <strong>absența apărărilor iraționale</strong> ale Eului; capacitatea de a munci și de a iubi.</td>
+<td align="left"><strong>Funcționarea orientată spre creștere/perfecționare</strong> (Adler/Fromm); <strong>Interese sociale</strong> (Adler); <strong>Lipsa rigidității compulsive</strong> (Horney).</td>
+</tr>
+<tr>
+<td align="left"><strong>Etiologia Imaturității</strong></td>
+<td align="left"><strong>Funcționarea oportunistă a Eului</strong>; personalitate <strong>infantilă, incomplet dezvoltată</strong>.</td>
+<td align="left"><strong>Fixații libidinale</strong> și <strong>conflicte psihosexuale nerezolvate</strong>.</td>
+<td align="left"><strong>Patternuri de relaționare defectuoase</strong> formate cu părinții (Adler, Horney, Fromm).</td>
+</tr>
+<tr>
+<td align="left"><strong>Motivația</strong></td>
+<td align="left"><strong>Tendință de amplificare a tensiunii</strong> (căutarea de noi tensiuni).</td>
+<td align="left"><strong>Tendință de reducere a tensiunii</strong> (homeostazie).</td>
+<td align="left">Amplificare a tensiunii (Adler); Creștere și împlinire (Horney/Fromm).</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">5. Personalitatea matură</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="6. Viziunea despre natura umană|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">9. Evaluaţi viziunea lui Allport despre natura umană şi argumentaţi orientarea sa.</div>
+        <div class="answer markdown-body">
+          <p>Viziunea lui Allport despre natura umană este <strong>pozitivă și optimistă</strong>. El a pornit de la studiul persoanelor adulte <strong>normale și mature</strong>, în contrast cu Freud, care se concentra pe patologie.</p>
+<p><strong>Argumentarea Orientării Optimiste:</strong></p>
+<ol>
+<li><strong>Omul ca ființă conștientă și rațională:</strong> Allport a pus accentul pe <strong>aspectele conștiente</strong> ale personalității, pe <strong>rațiune</strong> și <strong>liber arbitru</strong>.</li>
+<li><strong>Discontinuitatea cu Trecutul:</strong> Omul nu este prizonierul trecutului său. La maturitate, motivele sunt <strong>autonome funcțional</strong>.</li>
+<li><strong>Orientarea Proactivă și Teleologică:</strong> Omul este o ființă <strong>proactivă, intențională</strong> și unică. El este capabil de <strong>autodeterminare</strong>, fiind animat de <strong>impulsul spre creștere, unitate și unicitate</strong>.</li>
+<li><strong>Sănătatea Mintală ca Regulă:</strong> Allport considera că trebuie să studiem sănătatea psihică. Nevroza este văzută ca o personalitate infantilă, incomplet dezvoltată.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">6. Viziunea despre natura umană</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="7. Raportul ereditate–mediu|8. Rolul educației|Allport">
+        <div class="theorist">Allport</div>
+        <div class="question">10. Încadraţi teoria în funcţie de concepţia sa asupra raportului ereditate–mediu şi a rolului fiecăruia în formarea personalităţii. Care este locul şi rolul educaţiei, ca influenţă socială formativă, în această viziune?</div>
+        <div class="answer markdown-body">
+          <p><strong>Raportul Ereditate–Mediu:</strong>
+Allport încadrează teoria sa în <strong>interacțiunea ereditate–mediu</strong>, dar accentuează rolul modelator al mediului și al învățării.</p>
+<ul>
+<li><strong>Ereditatea (Biologicul):</strong> Ereditatea (somaticul, temperamentul, inteligența) constituie <strong>suportul, materia primă, potențialul</strong>. Unicitatea persoanei este dată de varietatea infinită a <strong>combinațiilor genetice</strong>.</li>
+<li><strong>Mediul (Socialul/Cultura):</strong> Are un <strong>rol modelator</strong> asupra suportului ereditar. Factorii sociali – <strong>cultura, situațiile trăite și rolurile jucate</strong> – sunt cei mai importanți în modelarea personalității. <strong>Cultura</strong> oferă repere, modele comportamentale și duce la o <strong>&quot;personalitate de bază&quot;</strong> specifică.</li>
+</ul>
+<p><strong>Rolul Educației (Influență Socială Formativă):</strong>
+Educația joacă un rol esențial în prelucrarea datului ereditar și în structurarea Eului.</p>
+<ol>
+<li><strong>Modelarea Materiei Prime:</strong> Educația modelează <strong>temperamentul și inteligența</strong> (materiile prime ereditare).</li>
+<li><strong>Procesul de Enculturație:</strong> Educația este un proces de <strong>internalizare progresivă</strong> a modelelor culturale (enculturație).</li>
+<li><strong>Dezvoltarea Eului:</strong> Socializarea și feedback-ul social (&quot;eurile-oglindă&quot;) contribuie la conturarea <strong>simțului eului</strong> (Respectul de sine, Imaginea Eului) și la <strong>simțul responsabilității morale</strong>.</li>
+<li><strong>Sănătatea Personalității:</strong> Educația este crucială pentru formarea unei personalități mature, care este capabilă să-și controleze conștient impulsurile și să se adapteze flexibil cerințelor realității. Nevroza este adesea rezultatul unei centrări necontrolate asupra Eului, indicând o educație defectuoasă care nu a reușit să integreze Eul într-o manieră realistă.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">7. Raportul ereditate–mediu</span><span class="tag">8. Rolul educației</span><span class="tag">Allport</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="1. Sistemul / structura personalității|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">1. În ce constă sistemul de personalitate la Cattell?</div>
+        <div class="answer markdown-body">
+          <p>Sistemul de personalitate la Cattell (abordare nomotetică) este conceput ca o <strong>configurație de predispoziții reactive permanente</strong> ale individului, al cărui scop este <strong>elaborarea de predicții valide asupra comportamentului</strong> într-o situație dată.</p>
+<p>Sistemul este bazat pe <strong>trăsături</strong>, clasificate după diverse criterii:</p>
+<ol>
+<li><strong>Trăsăturile Sursă (Factorii):</strong> Acestea sunt <strong>componentele de bază</strong> ale personalității. Ele sunt <strong>constructe ipotetice nominale</strong> (nu au o existență reală, spre deosebire de viziunea lui Allport). Cattell a identificat <strong>16 factori sursă</strong> comuni tuturor oamenilor.</li>
+<li><strong>Trăsăturile Superficiale:</strong> Reprezintă manifestări observabile, care rezultă din interacțiunea trăsăturilor sursă.</li>
+<li><strong>Trăsăturile după Conținut:</strong> Sunt clasificate în <strong>aptitudinale</strong> (ex: inteligența), <strong>temperamentale</strong> (stilul emoțional) și <strong>dinamic-motivaționale</strong>.</li>
+<li><strong>Trăsăturile Dinamice (Motivaționale):</strong><ul>
+<li><strong>Ergii (Ergs):</strong> Sursă energetică comportamentală <strong>înnăscută</strong> (înlocuind termenul de instinct). Cattell a identificat 11 ergi (ex: curiozitate, gregaritate, sex, securitate).</li>
+<li><strong>Sentimentele:</strong> Trăsături-sursă <strong>învățate</strong>, supuse modelării culturale.</li>
+<li>Ambele se manifestă dinamic în <strong>Atitudini</strong>.</li>
+</ul>
+</li>
+</ol>
+<p>Trăsăturile motivaționale se organizează într-o <strong>rețea dinamică</strong> prin mecanismul de <strong>subsidiere</strong> (satisfacerea unei trebuințe presupune activarea alteia). <strong>Sentimentul de sine</strong> (dobândit mai târziu) conferă <strong>coerență și stabilitate</strong> sistemului de personalitate.</p>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">1. Sistemul / structura personalității</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|9. Diferențe / asemănări între teorii|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">2. Analizaţi asemănările şi deosebirile dintre teoria lui Cattell şi teoria lui Allport în privinţa structurii personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Atât Cattell, cât și Allport sunt reprezentați ai <strong>Teoriilor Trăsăturilor</strong>, concentrându-se pe manifestările observabile și măsurabile ale personalității pentru a deduce structuri interne stabile. Amândoi au studiat personalitatea la nivelul trăsăturilor.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Aspect Comparat</th>
+<th align="left">Cattell (Abordarea Factorială)</th>
+<th align="left">Allport (Abordarea Structurală)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Natura Trăsăturilor</strong></td>
+<td align="left">Trăsăturile sunt <strong>nominale</strong> (constructe ipotetice).</td>
+<td align="left">Trăsăturile sunt <strong>reale</strong> (structuri neuropsihice stabile care cauzează comportamentul).</td>
+</tr>
+<tr>
+<td align="left"><strong>Metoda de Identificare</strong></td>
+<td align="left">Bază pe <strong>analiza factorială</strong> a unui volum mare de date (L, Q, T).</td>
+<td align="left">Bază pe <strong>generalizarea datelor de observație</strong> și pe abordarea idiografică (unică) a dispozițiilor personale.</td>
+</tr>
+<tr>
+<td align="left"><strong>Sistemul Structural</strong></td>
+<td align="left">Model <strong>nomotetic</strong> (valabil pentru toți) cu <strong>16 Factori Sursă</strong> comuni.</td>
+<td align="left">Model care nu propune o tipologie rigidă, ci se concentrează pe <strong>Proprium</strong> (Eul matur) și pe <strong>Dispozițiile Personale</strong> (trăsături individuale).</td>
+</tr>
+<tr>
+<td align="left"><strong>Motivația</strong></td>
+<td align="left">Motivația este structurată pe <strong>Ergi (înnăscuți)</strong> și <strong>Sentimente (învățate)</strong>.</td>
+<td align="left">Motivația este centrată pe <strong>Autonomia Funcțională</strong> (motivele adulte sunt independente de cele infantile).</td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">9. Diferențe / asemănări între teorii</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">3. Analizaţi natura diferenţelor individuale în viziunea lui Cattell.</div>
+        <div class="answer markdown-body">
+          <p>Diferențele individuale în viziunea lui Cattell rezultă din <strong>configurația particulară a trăsăturilor comune</strong>.</p>
+<ol>
+<li><strong>Varianța Factorilor Sursă:</strong> Deși cei 16 factori sursă sunt <strong>comuni</strong> tuturor oamenilor, diferențele individuale apar deoarece acești factori sunt prezenți în <strong>ponderi diferite</strong> la fiecare individ.</li>
+<li><strong>Trăsăturile Unice:</strong> Diferențele sunt explicate și prin <strong>trăsăturile unice</strong>, care sunt de natură <strong>motivațională și atitudinală complexă</strong> (interese).</li>
+<li><strong>Influența Ereditară vs. Învățare:</strong> Diferențele interindividuale sunt determinate de interacțiunea complexă dintre ereditate și mediu:<ul>
+<li><strong>Predispoziția nativă</strong> (ereditatea) favorizează anumite achiziții și este responsabilă de <strong>intensitatea prezenței trăsăturii</strong>.</li>
+<li><strong>Învățarea</strong> (mediul) este responsabilă de <strong>conținutul patternului comportamental</strong>.</li>
+<li>Cattell susținea că, dacă educația socială este uniformă (trăsăturile comune sunt la fel), <strong>diferențele individuale de natură înnăscută</strong> devin mai importante în determinarea personalității.</li>
+</ul>
+</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="2. Motivația umană|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">4. Care sunt elementele originale ale viziunii lui Cattell asupra motivaţiei?</div>
+        <div class="answer markdown-body">
+          <p>Cattell a abordat motivația dintr-o perspectivă structurată, centrată pe rigoare științifică.</p>
+<ol>
+<li><strong>Substituirea Conceptului de Instinct:</strong> A introdus conceptul de <strong>Erg</strong> (Ergon—muncă, energie) în locul termenului de instinct, ca unitate de bază energetică <strong>înnăscută</strong> a personalității.</li>
+<li><strong>Organizarea Dinamică:</strong> A organizat trebuințele motivaționale într-o <strong>rețea dinamică</strong> (nu o ierarhie fixă, ca la Maslow) prin mecanismul de <strong>subsidiere</strong> (o trăsătură motivațională subsidiază alte trebuințe).</li>
+<li><strong>Sentimentul de Sine:</strong> Un element motivațional învățat, care se dobândește mai târziu în dezvoltare și are rolul de a conferi <strong>coerență și stabilitate</strong> întregului sistem.</li>
+<li><strong>Controlul Impulsurilor și Inteligența:</strong> Motivația este strâns legată de capacitatea de <strong>control al impulsurilor</strong> (învățare integrativă). Cattell a argumentat că <strong>un nivel superior al inteligenței</strong> este asociat cu <strong>echilibrul emoțional</strong> (motivul fiind înțelegerea mai rapidă a situației și evitarea frustrărilor).</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">2. Motivația umană</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="3. Tipuri de personalitate / Tipologie|5. Personalitatea matură|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">5. Prin ce se aseamănă şi prin ce diferă viziunea asupra personalităţii mature în teoria lui Cattell faţă de psihanaliza clasică?</div>
+        <div class="answer markdown-body">
+          <p>Deși teoria lui Cattell se bazează pe rigoare statistică (teoria trăsăturilor), ea preia anumite concepte din psihanaliză în descrierea dezvoltării și maturității.</p>
+<p><strong>Asemănări (cu Freud):</strong></p>
+<ul>
+<li>Ambele teorii acordă o importanță crucială <strong>primei copilării (0–6 ani)</strong> pentru formarea personalității.</li>
+<li>Cattell a acceptat ideea că <strong>originea nevrozelor se află în această perioadă timpurie</strong> și că trebuințele orale și anale pot afecta personalitatea, deși nu era un adept al lui Freud.</li>
+<li>Ambele recunosc rolul Eului și al Supraeului (Cattell le consideră atitudini sociale primare formate în copilărie).</li>
+</ul>
+<p><strong>Deosebiri:</strong></p>
+<ul>
+<li><strong>Stadialitate:</strong> Cattell propune <strong>șase stadii</strong> care se întind pe <strong>toată durata vieții</strong> (viziune longitudinală, similară cu Erikson). Freud limitează dezvoltarea definitorie la primii 5 ani.</li>
+<li><strong>Criteriul Maturității:</strong> Cattell nu definește explicit tipul Genital, dar consideră că maturitatea implică o <strong>personalitate stabilă, echilibrată emoțional</strong>, ghidată de <strong>învățarea integrativă</strong> și de o bună <strong>forță a Eului</strong>. Maturitatea nu este marcată de depășirea fixațiilor libidinale, ci de o <strong>integrare optimă</strong> a patternurilor de răspuns.</li>
+<li><strong>Motivație:</strong> Cattell respinge determinismul instinctual rigid al lui Freud, fiind mai degrabă orientat spre <strong>determinismul riguros științific</strong> și spre rolul <strong>motivației de creștere</strong> (inducerea tensiunii/progresul).</li>
+</ul>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">3. Tipuri de personalitate / Tipologie</span><span class="tag">5. Personalitatea matură</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="4. Dezvoltarea personalității (ontogeneză)|10. Concepte originale specifice fiecărei teorii|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">6. Argumentaţi în ce măsură ideea lui Cattell de a formaliza descrierea şi interpretarea personalităţii în maniera ştiinţelor exacte este aplicabilă în practică.</div>
+        <div class="answer markdown-body">
+          <p>Ideea lui Cattell de a formaliza personalitatea în maniera științelor exacte (printr-o abordare nomotetică bazată pe date măsurabile și analize statistice) este <strong>larg aplicabilă în practică</strong>, dar prezintă și limite inerente abordării nomotetice și factoriale.</p>
+<p><strong>Aplicabilitate (Argumente Pro):</strong></p>
+<ol>
+<li><strong>Predicția Comportamentului:</strong> Scopul teoriei este de a oferi o descriere detaliată a personalității pentru a elabora <strong>predicții valide asupra comportamentului</strong> într-o situație dată, cerință esențială pentru o teorie științifică.</li>
+<li><strong>Instrumente Psihometrice:</strong> Contribuția sa majoră este <strong>Inventarul 16 PF</strong> (Sixteen Personality Factor Questionnaire), un instrument de măsurare a celor 16 factori sursă, care este <strong>larg utilizat</strong>.</li>
+<li><strong>Metode Statistice Riguroase:</strong> A dezvoltat noi tehnici de analiză statistică, inclusiv <strong>analiza factorială</strong>, care a oferit o clasificare detaliată a trăsăturilor, contribuind la o abordare <strong>nomotetică</strong> mai riguroasă.</li>
+<li><strong>Cunoașterea Factorilor Innați:</strong> A creat metoda <strong>MAVA</strong> pentru a estima gradul în care diferențele în trăsături se datorează factorilor genetici (ereditate) sau ambientali (mediu), informație valoroasă pentru intervențiile practice (educație/psihoterapie).</li>
+</ol>
+<p><strong>Limitele în Practică (Argumente Contra):</strong></p>
+<ol>
+<li><strong>Îndepărtarea de Individual:</strong> Formalizarea excesivă duce la abstractizare, iar trăsăturile nominale identificate prin analiză factorială pot produce o <strong>inacceptabilă îndepărtare de individul concret</strong>.</li>
+<li><strong>Dependența de Metodă:</strong> Concepția factorială este <strong>tributară metodei</strong> (rezultatele depind de eșantionare, validitatea testelor aplicate și erorile de interpretare).</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">4. Dezvoltarea personalității (ontogeneză)</span><span class="tag">10. Concepte originale specifice fiecărei teorii</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="6. Viziunea despre natura umană|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">7. Evaluaţi viziunea lui Cattell despre natura umană şi argumentaţi orientarea sa.</div>
+        <div class="answer markdown-body">
+          <p>Viziunea lui Cattell despre natura umană este una <strong>deterministă</strong>, dar de o factură mai puțin pesimistă decât a lui Freud, fiind orientată spre <strong>rigoare științifică</strong> și <strong>cercetare empirică</strong>.</p>
+<ol>
+<li><strong>Orientare Deterministă și Științifică:</strong> Cattell era satisfăcut să explice structura și mecanismele personalității într-o manieră <strong>riguros științifică</strong>, crezând în <strong>raportul cauză–efect</strong> și în necesitatea <strong>legităților</strong>.</li>
+<li><strong>Omul ca Ființă Controlabilă, dar nu Prizonieră:</strong> Deși credea în determinism (influența timpurie a experiențelor este mare), el <strong>nu excludea rolul întâmplării și al liberului arbitru</strong>. El considera că omul nu este prizonierul structurilor de personalitate formate în copilărie, în sensul postulat de psihanaliză.</li>
+<li><strong>Viziunea Contradictorie (Eugenia):</strong> O latură controversată a viziunii sale a fost pledoaria pentru <strong>eugenie</strong> (împerechere selectivă). El argumenta că, deoarece capacitatea de a dobândi o puternică conștiință morală și un bun echilibru emoțional este în parte determinată genetic, măsurile eugenice ar putea crea o societate mai inteligentă, responsabilă și altruistă.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">6. Viziunea despre natura umană</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="7. Raportul ereditate–mediu|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">8. Încadraţi teoria în funcţie de concepţia sa asupra raportului ereditate–mediu şi a rolului fiecăruia în formarea personalităţii.</div>
+        <div class="answer markdown-body">
+          <p>Teoria lui Cattell se încadrează în <strong>interacțiunea ereditate–mediu</strong>, fiind una dintre puținele teorii care a încercat să cuantifice ponderea fiecărui factor utilizând metoda MAVA.</p>
+<ol>
+<li><strong>Ereditatea (Factorul Biologic):</strong> Joacă un <strong>rol foarte important</strong>. Ereditatea oferă <strong>datul inițial</strong> (suportul) și este responsabilă pentru <strong>intensitatea prezenței trăsăturii</strong>. Ponderea factorilor ereditari este estimată la aproximativ <strong>33%</strong> din ansamblul determinării personalității. De asemenea, constituția corporală este legată de unele trăsături sursă (ciclotimia, schizotimia).</li>
+<li><strong>Mediul (Factorul Social):</strong> Modelează datul ereditar și este responsabil pentru <strong>conținutul patternului comportamental</strong>. Mediul acționează prin factori apropiați (familie) și factori sociali largi (cultura), descriși prin <strong>sintalitate</strong>.</li>
+<li><strong>Interacțiunea și Învățarea:</strong> Formarea personalității este rezultatul interacțiunii dintre ereditate și mediu, realizată prin <strong>procese de învățare</strong>, precum impregnarea, încercarea și eroarea, condiționarea clasică și condiționarea operantă. Predispoziția nativă favorizează un anumit tip de învățare.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">7. Raportul ereditate–mediu</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+      <div class="question-card" data-tags="8. Rolul educației|Cattell">
+        <div class="theorist">Cattell</div>
+        <div class="question">9. Care este locul şi rolul educaţiei, ca influenţă socială formativă, în această viziune?</div>
+        <div class="answer markdown-body">
+          <p>Educația, ca formă de influență socială și învățare, are un rol crucial în modelarea conținutului personalității și în dezvoltarea echilibrului emoțional.</p>
+<ol>
+<li><strong>Modelarea Comportamentului:</strong> Educația (părinții, educatorii) forjează trăsăturile de personalitate prin <strong>recompensarea comportamentelor dezirabile</strong> social și pedepsirea celor indezirabile (mecanismul <strong>condiționării operante</strong>).</li>
+<li><strong>Formarea Structurilor Eului:</strong> Influența părinților și fraților în <strong>prima copilărie (0–6 ani)</strong> este <strong>hotărâtoare</strong> pentru formarea atitudinilor sociale primare, inclusiv <strong>Eul, Supraeul</strong> și <strong>sentimentul de securitate/insecuritate</strong>.</li>
+<li><strong>Dezvoltarea Inteligenței și a Echilibrului:</strong> Un mediu bogat în stimulări favorizează dezvoltarea structurilor <strong>inteligenței</strong>, care, la rândul ei, ajută individul să înțeleagă situația și să evite frustrările, contribuind la <strong>echilibrul emoțional</strong> (scăzând riscul de nevrotism).</li>
+<li><strong>Consiliere și Potențial:</strong> Cunoașterea factorilor înnăscuți versus învățați este vitală pentru educatori, astfel încât aceștia să ajute copilul să aleagă un drum care să-i <strong>dezvolte potențialul</strong> pe care îl are, evitând frustrările.</li>
+<li><strong>Limita Educației:</strong> Educația poate doar să modeleze datul ereditar, nu să meargă împotriva acestuia. De asemenea, învățarea emoțională predominantă în primii ani (prin impregnare și condiționare clasică) <strong>scapă controlului rațional</strong>.</li>
+</ol>
+
+        </div>
+        <div class="tags-list">
+          <span class="tag">8. Rolul educației</span><span class="tag">Cattell</span>
+        </div>
+      </div>
+    
+  </div>
+
+</div>
+
+<!--<footer>
+  Generat pe 28.11.2025 • Markdown procesat cu marked.js
+</footer>-->
+
+<script>
+	// let filtersOpen = true;
+	
+  // function filterQuestions() {
+    // const selected = Array.from(document.querySelectorAll('.tag-checkbox:checked'))
+                          // .map(cb => cb.value);
+
+    // let visible = 0;
+    // document.querySelectorAll('.question-card').forEach(card => {
+      // const cardTags = card.dataset.tags.split('|');
+      // const matches = selected.length === 0 || selected.every(t => cardTags.includes(t));
+      // card.classList.toggle('hidden', !matches);
+      // if (matches) visible++;
+    // });
+    // document.getElementById('visible-count').textContent = visible;
+  // }
+
+  // function clearFilters() {
+    // document.querySelectorAll('.tag-checkbox').forEach(cb => cb.checked = false);
+    // filterQuestions();
+  // }
+  
+  // function toggleFilters() {
+	  // const content = document.getElementById('filters-content');
+	  // const toggleText = document.querySelector('.filters-toggle');
+	  
+	  // filtersOpen = !filtersOpen;
+	  // content.classList.toggle('collapsed', !filtersOpen);
+	  
+	  // if (filtersOpen) {
+		// toggleText.innerHTML = '− Ascunde';
+	  // } else {
+		// toggleText.innerHTML = '+ Afișează filtrele';
+	  // }
+	// }
+
+  // // Inițializare
+  // window.onload = () => filterQuestions();
+  
+	let filtersOpen = true;
+
+	function toggleFilters() {
+	  const content = document.getElementById('filters-content');
+	  const toggleText = document.querySelector('.filters-toggle');
+	  
+	  filtersOpen = !filtersOpen;
+	  content.classList.toggle('collapsed', !filtersOpen);
+	  
+	  if (filtersOpen) {
+		toggleText.innerHTML = '− Ascunde';
+	  } else {
+		toggleText.innerHTML = '+ Afișează filtrele';
+	  }
+	}
+
+	function filter() {
+	  const selected = [...document.querySelectorAll('.tag-checkbox:checked')].map(c => c.value);
+	  let visible = 0;
+	  document.querySelectorAll('.question-card').forEach(card => {
+		const tags = card.dataset.tags ? card.dataset.tags.split('|') : [];
+		const show = selected.length === 0 || selected.every(t => tags.includes(t));
+		card.classList.toggle('hidden', !show);
+		if (show) visible++;
+	  });
+	  document.getElementById('visible-count').textContent = visible;
+	  
+	  // document.getElementById('questions-container')?.scrollIntoView({
+		// behavior: 'smooth',
+		// block: 'start'
+	  // });
+	  window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
+	function clearFilters() {
+	  document.querySelectorAll('.tag-checkbox').forEach(c => c.checked = false);
+	  filter();
+	}
+	
+	let triggered = false;
+
+	window.addEventListener('scroll', () => {
+	  console.log('scrolling');
+	  if (triggered) return; // already fired
+	  console.log('scrolling2');
+
+	  const scrolled = window.scrollY || window.pageYOffset;
+	  const fiftyVH = window.innerHeight * 0.5;
+
+	  if (scrolled >= fiftyVH) {
+		// onScrollPast50vh();
+		filtersOpen = true;
+		toggleFilters();
+		
+		triggered = true;
+	  }
+	});
+
+	// Inițializare
+	window.onload = () => {
+	  filter();
+	};
+</script>
+
+</body>
+</html>
