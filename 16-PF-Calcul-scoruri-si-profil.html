@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>16 PF – Calcul scoruri și profil</title>
+<style>
+  :root{
+    --ink:#1d2433; --muted:#667085; --line:#d7dbe3; --bg:#f6f7f9; --card:#fff;
+    --accent:#2f5bd3; --accent-soft:#e7eefc; --sel:#2f5bd3; --warn:#b54708;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.4}
+  header{background:var(--card);border-bottom:1px solid var(--line);padding:14px 20px;position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+  header h1{font-size:18px;margin:0}
+  .progress{color:var(--muted);font-variant-numeric:tabular-nums}
+  .progress b{color:var(--ink)}
+  .btns{display:flex;gap:8px;flex-wrap:wrap}
+  button{font:inherit;border:1px solid var(--line);background:#fff;color:var(--ink);padding:7px 14px;border-radius:7px;cursor:pointer}
+  button:hover{border-color:#aab2c0}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button.danger{color:#b42318;border-color:#f3c3be}
+  button.danger:hover{background:#fef3f2}
+  main{max-width:1180px;margin:0 auto;padding:18px 20px 60px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:18px}
+  section h2{font-size:15px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.04em;color:#344054}
+  .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+  .meta label{display:flex;flex-direction:column;font-size:12px;color:var(--muted);gap:3px}
+  .meta input,.meta select{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;color:var(--ink)}
+  .hint{color:var(--muted);font-size:12.5px;margin:0 0 12px}
+  kbd{font-family:ui-monospace,monospace;font-size:11px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:#fafafa}
+
+  /* answer sheet */
+  .sheet{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:4px 14px}
+  .col{display:flex;flex-direction:column}
+  .col .gap{height:8px}
+  .item{display:flex;align-items:center;gap:4px;padding:1px 3px;border-radius:5px;outline:none}
+  .item:focus{background:var(--accent-soft)}
+  .item.unans .num{color:var(--warn)}
+  .num{width:30px;text-align:right;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);margin-right:3px}
+  .opt{width:26px;height:22px;border:1px solid #b9c0cc;border-radius:4px;background:#fff;font-size:12px;padding:0;color:#475467;cursor:pointer;line-height:20px}
+  .opt.on{background:var(--sel);border-color:var(--sel);color:#fff;font-weight:600}
+  .opt:hover:not(.on){border-color:var(--accent)}
+  .highlight-unans .item.unans{background:#fff4e5}
+
+  /* results */
+  table{border-collapse:collapse;width:100%}
+  .res th,.res td{border:1px solid var(--line);padding:5px 8px;text-align:center;font-variant-numeric:tabular-nums}
+  .res th{background:#f2f4f7;font-weight:600;font-size:12.5px}
+  .res td.l{text-align:left}
+  .res td.fac{font-weight:700}
+  .sten{font-weight:700}
+  .sten.lo{color:#175cd3}.sten.hi{color:#b42318}
+
+  /* profile */
+  .profile-wrap{position:relative;overflow-x:auto}
+  .profile{position:relative;min-width:960px}
+  .prof th,.prof td{border:1px solid #9aa3b2;padding:4px 6px;font-size:11.5px;vertical-align:middle}
+  .prof th{background:#f2f4f7}
+  .prof td.fac{font-weight:700;text-align:center;width:38px;font-size:13px}
+  .prof td.num{width:42px;text-align:center;font-size:13px;color:var(--ink);font-weight:600}
+  .prof td.desc{width:27%}
+  .prof td.grid{padding:0;width:330px}
+  .scale-head{display:flex;justify-content:space-between;padding:0 6px}
+  .scale-head span,.dots span{width:24px;text-align:center}
+  .dots{display:flex;justify-content:space-between;align-items:center;padding:0 6px;height:100%;min-height:44px;position:relative}
+  .dots span{color:#98a2b3;font-size:16px;line-height:1}
+  .dots span.mid{color:#d0d5dd}
+  .dots .letter{position:absolute;font-size:11px;color:#667085;pointer-events:none}
+  .band{position:absolute;top:0;bottom:0;background:rgba(47,91,211,.05);pointer-events:none}
+  svg.overlay{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+  .legend{color:var(--muted);font-size:12px;margin-top:8px}
+
+  @media print{
+    header .btns,.no-print{display:none!important}
+    header{position:static;border:0}
+    body{background:#fff}
+    section{border:0;padding:0;break-inside:avoid}
+    #answers-section{display:none}
+    main{max-width:none;padding:0}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>16 PF – calcul scoruri</h1>
+  <div class="progress" id="progress"></div>
+  <div class="btns">
+    <button id="btnUnans">Arată itemii necompletați</button>
+    <button id="btnClear" class="danger">Clear</button>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>Date subiect</h2>
+    <div class="meta">
+      <label>Nume<input data-meta="nume"></label>
+      <label>Prenume<input data-meta="prenume"></label>
+      <label>Sex<select data-meta="sex"><option value=""></option><option>F</option><option>M</option></select></label>
+      <label>Vârsta (ani)<input data-meta="ani" type="number" min="0"></label>
+      <label>Data<input data-meta="data" type="date"></label>
+    </div>
+  </section>
+
+  <section id="answers-section">
+    <h2>Foaie de răspuns (187 itemi)</h2>
+    <p class="hint">Click pe a / b / c pentru a marca răspunsul (click din nou pentru a-l anula). Introducere rapidă: click pe numărul unui item, apoi tastați <kbd>a</kbd> <kbd>b</kbd> <kbd>c</kbd> (sau <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>) – se trece automat la itemul următor; <kbd>Backspace</kbd> șterge, <kbd>↑</kbd> <kbd>↓</kbd> navighează. Răspunsurile se salvează automat în browser.</p>
+    <div class="sheet" id="sheet"></div>
+  </section>
+
+  <section>
+    <h2>Note brute și note standard (etalon)</h2>
+    <table class="res">
+      <thead><tr><th>Factor</th><th>Denumire</th><th>Notă brută</th><th>Max.</th><th>Notă standard (0–10)</th><th>Clasa din etalon</th><th class="l">Interpretare (extreme 0–2 / 8–10)</th></tr></thead>
+      <tbody id="resBody"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Foaie de profil 16 PF</h2>
+    <div class="profile-wrap"><div class="profile" id="profile">
+      <table class="prof">
+        <thead>
+          <tr><th>Fact.</th><th>A/B</th><th>St.</th><th>Note scăzute</th>
+            <th class="grid"><div class="scale-head" id="scaleHead"></div></th>
+            <th>Note ridicate</th></tr>
+        </thead>
+        <tbody id="profBody"></tbody>
+      </table>
+      <svg class="overlay" id="overlay"></svg>
+    </div></div>
+    <p class="legend">Punctele marchează nota standard (0–10) a fiecărui factor; profilul se completează pe măsură ce introduceți răspunsurile. Zona umbrită 4–7 = interval mediu.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+"use strict";
+var N_ITEMS = 187;
+var LS_ANS = "16pf_answers_v1", LS_META = "16pf_meta_v1";
+
+/* ---- Scoring key: "item+option" worth 2 points / 1 point (from 16pf_scale_si_itemi) ---- */
+var KEY = {
+  A:{p2:"3a 26c 27c 51c 52a 76c 101a 126a 151c 176a", p1:"3b 26b 27b 51b 52b 76b 101b 126b 151b 176b"},
+  B:{p2:"", p1:"28b 53b 54b 77c 78b 102c 103b 127c 128b 152a 153c 177a 178a"},
+  C:{p2:"4a 5c 29c 30c 55a 79c 80c 104a 105a 129c 130a 154c 179a", p1:"4b 5b 29b 30b 55b 79b 80b 104b 105b 129b 130b 154b 179b"},
+  E:{p2:"6c 7a 31a 32c 56a 57c 81c 106a 131a 155c 156c 180a 181a", p1:"6b 7b 31b 32b 56b 57b 81b 106b 131b 155b 156b 180b 181b"},
+  F:{p2:"8c 33a 58a 82c 83a 107c 108c 132a 133a 157c 158c 182a 183a", p1:"8b 33b 58b 82b 83b 107b 108b 132b 133b 157b 158b 182b 183b"},
+  G:{p2:"9c 34c 59c 84c 109a 134a 159c 160a 184a 185a", p1:"9b 34b 59b 84b 109b 134b 159b 160b 184b 185b"},
+  H:{p2:"10a 35c 36a 60c 61c 85c 86c 110a 111a 135a 136a 161c 186a", p1:"10b 35b 36b 60b 61b 85b 86b 110b 111b 135b 136b 161b 186b"},
+  I:{p2:"11c 12a 37a 62c 87c 112a 137c 138a 162c 163a 187a", p1:"11b 12b 37b 62b 87b 112b 137b 138b 162b 163b 187b"},
+  L:{p2:"13c 38a 63c 64c 88a 89c 113a 114a 139c 164a", p1:"13b 38b 63b 64b 88b 89b 113b 114b 139b 164b"},
+  M:{p2:"14c 15c 39a 40a 65a 90c 91a 115a 116a 140a 141c 165c 166c", p1:"14b 15b 39b 40b 65b 90b 91b 115b 116b 140b 141b 165b 166b"},
+  N:{p2:"16c 17a 41c 42a 66c 67c 92c 117a 142a 167a", p1:"16b 17b 41b 42b 66b 67b 92b 117b 142b 167b"},
+  O:{p2:"18a 19c 43a 44c 68c 69a 93c 94c 118a 119a 143a 144c 168c", p1:"18b 19b 43b 44b 68b 69b 93b 94b 118b 119b 143b 144b 168b"},
+  Q1:{p2:"20a 21c 45c 46a 70a 95c 120c 145a 169a 170c", p1:"20b 21b 45b 46b 70b 95b 120b 145b 169b 170b"},
+  Q2:{p2:"22c 47a 71a 72a 96c 97c 121c 122c 146a 171a", p1:"22b 47b 71b 72b 96b 97b 121b 122b 146b 171b"},
+  Q3:{p2:"23c 24c 48a 73a 98a 123c 147c 148a 172c 173c", p1:"23b 24b 48b 73b 98b 123b 147b 148b 172b 173b"},
+  Q4:{p2:"25c 49a 50a 74a 75c 99a 100c 124a 125c 149a 150c 174a 175c", p1:"25b 49b 50b 74b 75b 99b 100b 124b 125b 149b 150b 174b 175b"}
+};
+var FACTORS = ["A","B","C","E","F","G","H","I","L","M","N","O","Q1","Q2","Q3","Q4"];
+
+/* ---- Etalon: raw-score class for each standard note 0..10 ([min,max]; null = no raw score) ---- */
+var ETALON = {
+  A:[[0,4],[5,5],[6,7],[8,8],[9,9],[10,10],[11,12],[13,13],[14,14],[15,15],[16,20]],
+  B:[[0,4],[5,5],[6,6],[7,7],[8,8],[9,9],null,[10,10],null,[11,11],[12,13]],
+  C:[[0,4],[5,9],[10,11],[12,12],[13,14],[15,15],[16,17],[18,19],[20,20],[21,22],[23,26]],
+  E:[[0,4],[5,5],[6,7],[8,9],[10,10],[11,12],[13,13],[14,15],[16,17],[18,18],[19,26]],
+  F:[[0,5],[6,6],[7,8],[9,10],[11,12],[13,14],[15,16],[17,17],[18,19],[20,20],[21,26]],
+  G:[[0,5],[6,7],[8,9],[10,10],[11,12],[13,13],[14,15],[16,16],[17,17],[18,18],[19,20]],
+  H:[[0,4],[5,5],[6,7],[8,10],[11,12],[13,14],[15,16],[17,19],[20,21],[22,22],[23,26]],
+  I:[[0,4],[5,5],[6,7],[8,8],[9,9],[10,11],[12,12],[13,14],[15,15],[16,16],[17,20]],
+  L:[[0,3],[4,4],[5,6],[7,7],[8,8],[9,9],[10,11],[12,12],[13,14],[15,15],[16,20]],
+  M:[[0,5],[6,7],[8,9],[10,10],[11,12],[13,14],[15,15],[16,16],[17,18],[19,20],[21,26]],
+  N:[[0,4],[5,5],[6,6],[7,7],[8,9],[10,10],[11,11],[12,12],[13,13],[14,14],[15,20]],
+  O:[[0,2],[3,3],[4,4],[5,6],[7,7],[8,9],[10,11],[12,13],[14,15],[16,16],[17,26]],
+  Q1:[[0,5],[6,6],[7,7],[8,8],[9,9],[10,11],[12,12],[13,13],[14,15],[16,16],[17,20]],
+  Q2:[[0,3],[4,5],[6,6],[7,7],[8,9],[10,11],[12,12],[13,14],[15,15],[16,16],[17,20]],
+  Q3:[[0,5],[6,7],[8,8],[9,9],[10,11],[12,12],[13,14],[15,15],[16,16],[17,18],[19,20]],
+  Q4:[[0,2],[3,4],[5,5],[6,7],[8,10],[11,12],[13,14],[15,16],[17,18],[19,20],[21,26]]
+};
+
+var INFO = {
+  A:{name:"Schizotim / ciclotim", ext:"Rece, distant / cald, participativ",
+     lo:"Rezervat, distant, critic, rece, rigid, opozant la direcționare, exigent (schizotim).",
+     hi:"Deschis, cald, prietenos, cordial, cooperant, sociabil, adaptabil; dezinvolt, sincer, expresiv, încrezător (ciclotim)."},
+  B:{name:"Inteligență", ext:"Gândire concretă / gândire abstractă",
+     lo:"Puțin inteligent, gândire concretă, înțelegere greoaie, lentoare și sărăcie intelectuală, abandonează ușor.",
+     hi:"Inteligență vie, gândire abstractă, vivacitate intelectuală, randament bun, perseverent; cu interese intelectuale."},
+  C:{name:"Forța Eului", ext:"Instabilitate / stabilitate emoțională",
+     lo:"Eu slab: stabilitate emoțională scăzută, emotivitate generalizată, labilitate și instabilitate emoțională; influențabil, sugestibil, impresionabil; fatigabil, iritabil, neliniștit, nemulțumit, temător.",
+     hi:"Eu puternic: stabil emoțional, matur, calm, liniștit, realist, adaptat faptelor, moral bun, rezistent nervos, eficace."},
+  E:{name:"Supunere / ascendență", ext:"Supus / dominant, autoritar, agresiv",
+     lo:"Supus, docil, dependent; convențional, conformist, conciliant; modest, amabil, cu tact; autopunitiv; retras, stingher, nesigur, cedează ușor.",
+     hi:"Autoritar, dominant, sigur de sine, tenace; tendință de afirmare, încăpățânat; aspru, sever, nonconformist; aventuros, voluntar, viguros, vanitos, agresiv."},
+  F:{name:"Expansivitate", ext:"Sobru, prudent / expansiv, entuziast, spontan",
+     lo:"Non-expansiv: tăcut, taciturn, interiorizat, necomunicativ, introspectiv, reținut; grijuliu, fricos, abătut, neliniștit, visător, pesimist.",
+     hi:"Expansiv: entuziast, vesel, vorbăreț, viu însuflețit; deschis, sociabil, spontan, expresiv, nepăsător, senin; adaptabil, reflectă imaginea grupului."},
+  G:{name:"Forța Supraeului", ext:"Lipsit de conștiinciozitate / conștiincios",
+     lo:"Supraeu slab: delăsător, indolent, neglijent cu regulile și regulamentele, slab simț al datoriei, inconstant, neperseverent, nesigur, tolerant.",
+     hi:"Supraeu puternic: conștiincios, cu simțul datoriei, perseverent, serios, responsabil, prevăzător, exigent, stăpânit, decis, matur, stabil în conduită, integru; atent cu ceilalți."},
+  H:{name:"Threcția / parmia", ext:"Rușinos, ezitant / aventuros, neinhibat",
+     lo:"Threcția: timid, sensibil la amenințare, fricos; prudent, rezervat, retras, ascuns, neîncrezător, timorat, repliat pe sine, nu se exteriorizează; dificil de contactat; inferioritate.",
+     hi:"Parmia: curajos, îndrăzneț, viguros, dinamic, sociabil, deschis pentru sexul opus; spontan, prietenos, adaptabil; largă rezonanță emoțională; interese sentimentale și artistice."},
+  I:{name:"Harria / premsia", ext:"Rațional, realist, dur / afectiv, sensibil, intuitiv",
+     lo:"Harria: matur emoțional; dur, realist, practic; rațional, activ, își asumă responsabilități; independent, stabil, mulțumit de sine.",
+     hi:"Premsia: sensibil estetic, centrează atenția; delicat, amabil, dependent emoțional-afectiv, imaginativ, introspectiv; neliniștit, visător, nepractic; pretențios, nerăbdător."},
+  L:{name:"Alaxia / protensia", ext:"Încrezător, înțelegător / suspicios, sceptic",
+     lo:"Încrezător, comunicativ, înțelegător, neinvidios, neafectat, serios; preocupat de ceilalți.",
+     hi:"Neîncrezător, suspicios, bănuitor, invidios, tendință la gelozie; timid, rușinos, ursuz, rigid, prudent, circumspect; se integrează greu; nepreocupat de alții."},
+  M:{name:"Praxernia / autia", ext:"Practic / imaginativ, visător",
+     lo:"Practic, conștiincios, scrupulos, corect, grijuliu, controlat, convențional, interese restrânse; afectat; temător.",
+     hi:"Imaginativ, boem, neconvențional, excentric; ignoră realitățile imediate; preocupat de sine; relaxat, calm, se emoționează fără să se tulbure."},
+  N:{name:"Șiretenie", ext:"Deschis, neprefăcut / diplomat, calculat",
+     lo:"Direct, naiv, natural, spontan, neafectat; fără tact; stângaci, repezit; mulțumit de sine; sentimental; deschis spre compania altora.",
+     hi:"Abil, șiret, perspicace, subtil, experimental, monden, rafinat, clarvăzător; distant, rece, dificil; ordonat, precis; non-sentimental; introspectiv."},
+  O:{name:"Încredere / culpabilitate", ext:"Automulțumit / îndoială de sine",
+     lo:"Încredere calmă: calm, liniștit, armonios, puțin sensibil, rece, încrezător; indiferent, dur, rezistent nervos; încredere în sine.",
+     hi:"Neîncredere neliniștită: neliniștit, culpabil, agitat; meditativ, frământat; bănuitor, suspicios, depreciativ; încordat, temător, tulburat, anxios; deprimat, descurajat, fobogen; ursuz, fatigabil."},
+  Q1:{name:"Conservator / liberal", ext:"Conservator, tradiționalist / liber în gândire, critic",
+     lo:"Conservatorism: atașat de tradiții și de idei prestabilite, rezistent și prudent la nou și schimbare; slab spirit critic sau novator.",
+     hi:"Radicalism: novator, liber în gândire și acțiune, spirit critic; deschis la nou și schimbare."},
+  Q2:{name:"Aderență la grup", ext:"Orientat spre grup / autosuficient, decide singur",
+     lo:"Dependent de grup, atașat grupului; preferă munca și deciziile colective; hotărăște în consens cu ceilalți.",
+     hi:"Independent, hotărât, se autoconduce, decide prompt, fără nevoie de aprobare și susținere de grup; plin de resurse personale."},
+  Q3:{name:"Sentimentul de sine", ext:"Lax, neglijent față de reguli / disciplinat, exigent",
+     lo:"Caracter necontrolat, în conflict cu sine, impulsiv, imprudent; slab autocontrol voluntar.",
+     hi:"Autocontrolat și stabil caracterial, circumspect, prudent, vigilent, conștiincios, tenace, disciplinat, eficient; vanitos; sentiment de sine puternic."},
+  Q4:{name:"Tensiune ergică", ext:"Relaxat, liniștit, tolerant / tensionat, frustrat",
+     lo:"Tensiune ergică scăzută: relaxat, destins, calm, tonus scăzut.",
+     hi:"Încordat, crispat, tensionat, surmenat, iritabil, neliniștit, nerăbdător; hiperactiv, neastâmpărat; sentiment de frustrare; ușor de bulversat."}
+};
+
+/* Build lookup: points[item][opt] = {factor, pts} */
+var POINTS = {};
+FACTORS.forEach(function(f){
+  [["p2",2],["p1",1]].forEach(function(pair){
+    KEY[f][pair[0]].split(/\s+/).filter(Boolean).forEach(function(tok){
+      var m = tok.match(/^(\d+)([abc])$/); if(!m) return;
+      (POINTS[m[1]] = POINTS[m[1]] || {})[m[2]] = {f:f, pts:pair[1]};
+    });
+  });
+});
+var MAX = {};
+FACTORS.forEach(function(f){ MAX[f] = 2*KEY[f].p2.split(/\s+/).filter(Boolean).length + (KEY[f].p2 ? 0 : KEY[f].p1.split(/\s+/).filter(Boolean).length); });
+
+/* ---- storage ---- */
+function load(k){ try{ return JSON.parse(localStorage.getItem(k)) || {}; }catch(e){ return {}; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+var answers = load(LS_ANS), meta = load(LS_META);
+
+/* ---- answer sheet (columns of 25, as on the paper sheet) ---- */
+var sheet = document.getElementById("sheet");
+var itemEls = {};
+for (var c=0; c<Math.ceil(N_ITEMS/25); c++){
+  var col = document.createElement("div"); col.className="col";
+  for (var i=c*25+1; i<=Math.min(N_ITEMS,(c+1)*25); i++){
+    if ((i-1)%25===5 || (i-1)%25===10 || (i-1)%25===15 || (i-1)%25===20) { var g=document.createElement("div"); g.className="gap"; col.appendChild(g); }
+    var row = document.createElement("div"); row.className="item"; row.tabIndex=0; row.dataset.item=i;
+    var n = document.createElement("span"); n.className="num"; n.textContent=i; row.appendChild(n);
+    ["a","b","c"].forEach(function(o){
+      var b=document.createElement("button"); b.type="button"; b.className="opt"; b.textContent=o; b.dataset.opt=o; b.tabIndex=-1; row.appendChild(b);
+    });
+    col.appendChild(row); itemEls[i]=row;
+  }
+  sheet.appendChild(col);
+}
+function paintItem(i){
+  var row=itemEls[i], v=answers[i];
+  row.classList.toggle("unans", !v);
+  row.querySelectorAll(".opt").forEach(function(b){ b.classList.toggle("on", b.dataset.opt===v); });
+}
+function setAnswer(i,v){
+  if (v) answers[i]=v; else delete answers[i];
+  save(LS_ANS, answers); paintItem(i); recompute();
+}
+sheet.addEventListener("click", function(e){
+  var b=e.target.closest(".opt"); var row=e.target.closest(".item"); if(!row) return;
+  var i=+row.dataset.item;
+  if (b){ setAnswer(i, answers[i]===b.dataset.opt ? null : b.dataset.opt); }
+  row.focus({preventScroll:true});
+});
+sheet.addEventListener("keydown", function(e){
+  var row=e.target.closest(".item"); if(!row) return;
+  var i=+row.dataset.item, k=e.key.toLowerCase();
+  var map={a:"a",b:"b",c:"c","1":"a","2":"b","3":"c"};
+  if (map[k]){ e.preventDefault(); setAnswer(i,map[k]); if(itemEls[i+1]) itemEls[i+1].focus(); }
+  else if (k==="backspace"||k==="delete"){ e.preventDefault(); setAnswer(i,null); if(k==="backspace" && itemEls[i-1]) itemEls[i-1].focus(); }
+  else if (k==="arrowdown"){ e.preventDefault(); if(itemEls[i+1]) itemEls[i+1].focus(); }
+  else if (k==="arrowup"){ e.preventDefault(); if(itemEls[i-1]) itemEls[i-1].focus(); }
+  else if (k==="arrowright"){ e.preventDefault(); if(itemEls[i+25]) itemEls[i+25].focus(); }
+  else if (k==="arrowleft"){ e.preventDefault(); if(itemEls[i-25]) itemEls[i-25].focus(); }
+});
+
+/* ---- meta fields ---- */
+document.querySelectorAll("[data-meta]").forEach(function(el){
+  el.value = meta[el.dataset.meta] || "";
+  el.addEventListener("input", function(){ meta[el.dataset.meta]=el.value; save(LS_META, meta); });
+});
+
+/* ---- scoring ---- */
+function rawScores(){
+  var s={}; FACTORS.forEach(function(f){ s[f]=0; });
+  Object.keys(answers).forEach(function(i){ var p=POINTS[i] && POINTS[i][answers[i]]; if(p) s[p.f]+=p.pts; });
+  return s;
+}
+function sten(f, raw){
+  var t=ETALON[f];
+  for (var n=0;n<=10;n++){ var r=t[n]; if(r && raw>=r[0] && raw<=r[1]) return n; }
+  // above the top class (e.g. I max 22 > 20) → 10
+  for (var n2=10;n2>=0;n2--){ if(t[n2]) { if(raw>t[n2][1]) return n2; break; } }
+  return 0;
+}
+function cls(r){ return r ? (r[0]===r[1] ? String(r[0]) : r[0]+"–"+r[1]) : "—"; }
+
+/* ---- results table + profile rows ---- */
+var resBody=document.getElementById("resBody"), profBody=document.getElementById("profBody");
+var scaleHead=document.getElementById("scaleHead");
+for (var s=0;s<=10;s++){ var sp=document.createElement("span"); sp.textContent=s; scaleHead.appendChild(sp); }
+var resCells={}, profCells={};
+FACTORS.forEach(function(f){
+  var info=INFO[f];
+  var tr=document.createElement("tr");
+  tr.innerHTML='<td class="fac">'+f+'</td><td class="l">'+info.name+'</td><td class="raw"></td><td>'+MAX[f]+'</td><td class="sten"></td><td class="cls"></td><td class="l ext"></td>';
+  resBody.appendChild(tr);
+  resCells[f]={raw:tr.querySelector(".raw"), sten:tr.querySelector(".sten"), cls:tr.querySelector(".cls"), ext:tr.querySelector(".ext")};
+
+  var pr=document.createElement("tr");
+  var dots=''; for(var d=0; d<=10; d++) dots+='<span class="'+((d>=4&&d<=7)?'':'')+'">·</span>';
+  pr.innerHTML='<td class="fac">'+f+'</td><td class="num praw"></td><td class="num psten"></td><td class="desc">'+info.lo+'</td>'+
+    '<td class="grid"><div class="dots">'+dots+'</div></td><td class="desc">'+info.hi+'</td>';
+  profBody.appendChild(pr);
+  profCells[f]={raw:pr.querySelector(".praw"), sten:pr.querySelector(".psten"), dots:pr.querySelector(".dots")};
+});
+
+var current={};
+function recompute(){
+  var raw=rawScores(), cnt=Object.keys(answers).length;
+  document.getElementById("progress").innerHTML='Răspunsuri: <b>'+cnt+'</b> / '+N_ITEMS+(cnt<N_ITEMS?' &nbsp;·&nbsp; lipsă: <b>'+(N_ITEMS-cnt)+'</b>':' ✓');
+  FACTORS.forEach(function(f){
+    var st=sten(f, raw[f]); current[f]=st;
+    var c=resCells[f];
+    c.raw.textContent=raw[f]; c.sten.textContent=st;
+    c.sten.className="sten"+(st<=2?" lo":st>=8?" hi":"");
+    c.cls.textContent=cls(ETALON[f][st]);
+    var parts=INFO[f].ext.split(" / ");
+    c.ext.textContent = st<=2 ? parts[0] : st>=8 ? parts[1] : "Zonă medie";
+    profCells[f].raw.textContent=raw[f]; profCells[f].sten.textContent=st;
+  });
+  drawProfile();
+}
+
+/* ---- profile line (SVG overlay positioned on the dot grid) ---- */
+var overlay=document.getElementById("overlay"), profile=document.getElementById("profile");
+function drawProfile(){
+  var box=profile.getBoundingClientRect();
+  overlay.setAttribute("width", box.width); overlay.setAttribute("height", box.height);
+  overlay.setAttribute("viewBox","0 0 "+box.width+" "+box.height);
+  var pts=[], bands="";
+  FACTORS.forEach(function(f,idx){
+    var spans=profCells[f].dots.children;
+    var r=spans[current[f]].getBoundingClientRect();
+    pts.push([r.left+r.width/2-box.left, r.top+r.height/2-box.top]);
+    if(idx===0){
+      var a=spans[4].getBoundingClientRect(), b=spans[7].getBoundingClientRect();
+      var tb=profBody.getBoundingClientRect();
+      bands='<rect x="'+(a.left-box.left)+'" y="'+(tb.top-box.top)+'" width="'+(b.right-a.left)+'" height="'+tb.height+'" fill="rgba(47,91,211,0.06)"/>';
+    }
+  });
+  var path=pts.map(function(p,i){ return (i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1); }).join(" ");
+  var circles=pts.map(function(p,i){
+    return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="5.5" fill="#2f5bd3" stroke="#fff" stroke-width="1.5"/>';
+  }).join("");
+  overlay.innerHTML=bands+'<path d="'+path+'" fill="none" stroke="#2f5bd3" stroke-width="2" stroke-linejoin="round"/>'+circles;
+}
+window.addEventListener("resize", drawProfile);
+window.addEventListener("beforeprint", drawProfile);
+window.addEventListener("afterprint", drawProfile);
+
+/* ---- buttons ---- */
+var clearBtn=document.getElementById("btnClear"), clearTimer=null;
+clearBtn.addEventListener("click", function(){
+  if(!clearBtn.dataset.armed){
+    clearBtn.dataset.armed="1"; clearBtn.textContent="Confirmați ștergerea?"; clearBtn.classList.add("primary");
+    clearTimer=setTimeout(function(){ delete clearBtn.dataset.armed; clearBtn.textContent="Clear"; clearBtn.classList.remove("primary"); },4000);
+    return;
+  }
+  clearTimeout(clearTimer); delete clearBtn.dataset.armed; clearBtn.textContent="Clear"; clearBtn.classList.remove("primary");
+  answers={}; meta={};
+  try{ localStorage.removeItem(LS_ANS); localStorage.removeItem(LS_META); }catch(e){}
+  document.querySelectorAll("[data-meta]").forEach(function(el){ el.value=""; });
+  for(var i=1;i<=N_ITEMS;i++) paintItem(i);
+  recompute();
+});
+document.getElementById("btnUnans").addEventListener("click", function(){
+  var on=sheet.classList.toggle("highlight-unans");
+  this.textContent = on ? "Ascunde evidențierea" : "Arată itemii necompletați";
+  if(on){ for(var i=1;i<=N_ITEMS;i++) if(!answers[i]){ itemEls[i].scrollIntoView({block:"center",behavior:"smooth"}); itemEls[i].focus({preventScroll:true}); break; } }
+});
+
+for(var j=1;j<=N_ITEMS;j++) paintItem(j);
+recompute();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawProfile);
+
+/* expose for testing */
+window.__16pf = {rawScores:rawScores, sten:sten, POINTS:POINTS, MAX:MAX, ETALON:ETALON};
+})();
+</script>
+</body>
+</html>
