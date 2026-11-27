@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculator MBTI – scoruri și tip</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--tx:#1f2328;--mut:#6a7078;--bd:#d9d6cc;--ac:#2f5fd0;--acbg:#e6edfb;--ok:#1f8a4c;--warn:#b4501e;--bar:#c9d5f3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181b;--card:#222428;--tx:#e8e8e6;--mut:#9aa0a8;--bd:#3a3d43;--ac:#7fa2f5;--acbg:#26334f;--ok:#58c486;--warn:#f0905a;--bar:#34456e}}
+:root[data-theme="dark"]{--bg:#17181b;--card:#222428;--tx:#e8e8e6;--mut:#9aa0a8;--bd:#3a3d43;--ac:#7fa2f5;--acbg:#26334f;--ok:#58c486;--warn:#f0905a;--bar:#34456e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:920px;margin:0 auto;padding:16px}
+h1{font-size:1.6rem;margin:.4em 0}h2{font-size:1.25rem;margin:1.4em 0 .5em}h3{font-size:1.05rem;margin:1em 0 .3em}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin:12px 0}
+.mut{color:var(--mut);font-size:.92rem}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 16px;border-radius:8px;cursor:pointer}
+button.pri{background:var(--ac);border-color:var(--ac);color:#fff}
+button.danger{color:var(--warn);border-color:var(--warn)}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.it{display:flex;align-items:center;gap:6px;border:1px solid var(--bd);border-radius:8px;padding:4px 6px;background:var(--bg)}
+.it.done{border-color:var(--ok)}
+.it b{min-width:2.2em;font-size:.9rem}
+.it button{padding:2px 9px;border-radius:6px;font-size:.9rem}
+.it button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.bar{display:flex;align-items:center;gap:8px;margin:3px 0}
+.bar span.l{width:2.2em;font-weight:700}.bar .tr{flex:1;background:var(--bar);border-radius:6px;height:20px;overflow:hidden}
+.bar .fi{background:var(--ac);height:100%}
+.bar.win .l{color:var(--ok)}
+.dim{border-top:1px solid var(--bd);padding:10px 0}
+.big{font-size:2.4rem;font-weight:800;letter-spacing:.08em;color:var(--ac)}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--bd);padding:6px 8px;text-align:left}
+.tag{display:inline-block;background:var(--acbg);border-radius:999px;padding:2px 12px;margin:2px;font-size:.92rem}
+.scroll{overflow-x:auto}
+.warn{color:var(--warn)}
+</style>
+</head>
+<body>
+<main>
+<h1>Calculator MBTI – scoruri pe cei 8 factori</h1>
+<p class="mut">Bifează răspunsurile din Inventarul Tipologic Myers-Briggs (126 de itemi). Răspunsurile se salvează automat în browser și pot fi șterse cu butonul „Șterge tot”.</p>
+
+<div class="card">
+  <div class="row"><b>Sex:</b>
+    <button id="sM">Masculin</button><button id="sF">Feminin</button>
+    <span class="mut">(necesar: grila de cotare pentru Gândire/Afectivitate diferă pe sexe)</span></div>
+  <p class="mut" id="prog"></p>
+  <div class="row">
+    <button class="pri" id="calc">Calculează rezultatul</button>
+    <button class="danger" id="clr">Șterge tot</button>
+  </div>
+  <p class="mut">Itemii sărați rămân necompletați (0 puncte). Apasă din nou pe un răspuns bifat ca să-l anulezi. La itemul 17 poți marca cel mult două răspunsuri (dacă bifezi al treilea, cel mai vechi este înlocuit).</p>
+</div>
+
+<div id="sheet"></div>
+<div id="res"></div>
+</main>
+<script>
+const KEY='mbti_ro_v1';
+const OPT={14:3,17:3,81:3,93:3,111:3,123:3,124:3,116:5};
+const MULTI={17:2}; // itemi la care se pot marca cel mult 2 răspunsuri
+const P=s=>{const o={};s.split(' ').forEach(t=>{const m=t.match(/^(\d+)([a-e])(\d)$/);(o[m[1]]=o[m[1]]||{})[m[2]]=+m[3]});return o};
+// Cheia de cotare: itemRăspuns Puncte (cerc negru = 1, dreptunghi negru = 2)
+const K={
+E:P('3a2 7a1 10a2 13b2 16b2 19a2 23a1 26a1 31a1 37b2 40b1 66a1 68a1 72a1 75b2 79a1 81b1 86a1 90a1'),
+I:P('3b2 7b2 10b2 13a1 16a1 23b1 31b2 37a1 40a1 55b1 66b1 72b1 75a1 77b2 79b2 81c2 86b1 90b2'),
+S:P('2a2 5b1 9a2 11a1 18b2 22b1 25a1 29a2 33a2 42b1 44a1 46b2 48a2 50a2 52a1 58a1 61a2 67a1 69a1 71a1 80b1 83b1 85b1 91a2'),
+N:P('2b2 5a2 9b2 11b2 18a1 25b1 29b1 33b1 42a2 44b1 58b2 61b1 63b2 65a2 71b1 83a2'),
+TM:P('6b1 15b2 21b2 28b2 30a2 32a2 34a1 36a1 38b2 41a1 43a1 45a2 47b2 49b2 51b2 54b1 56b1 60a2 89a1 92b2'),
+TF:P('6b2 15b2 21b2 28b2 30a2 32a2 34a2 36a1 38b2 41a1 43a1 45a2 47b2 49b2 51b2 54b1 56b1 60a2 89a1 92b1'),
+FM:P('6a1 15a1 21a2 28a1 30b2 32b2 34b2 36b2 38a1 41b1 43b1 56a1 73a1 87a1'),
+FF:P('6a2 15a1 21a2 30b1 32b1 34b2 36b2 38a1 41b1 43b2 56a1 70a1 77a2 87a2'),
+J:P('1a2 4a2 8b1 12a2 14a1 17c1 20a1 24a1 27a2 35a2 39a2 53b1 57a1 59b1 62a2 74b1 78b1 82b1 84a2 95a1'),
+P:P('1b2 4b1 8a1 12b2 14b1 14c1 17a1 20b2 24b1 27b2 35b2 39b2 53a2 57b1 62b1 64a1 74a1 76b2 78a1 82a1 84b1 88b1 93b1 93c1')};
+const NAMES={E:'Extraversie',I:'Introversie',S:'Senzorialitate',N:'Intuiție',T:'Gândire',F:'Afectivitate',J:'Judecare (J)',P:'Percepție (P)'};
+const DIMS=[['E','I','Orientarea energiei','Unde îți îndrepți energia și atenția: spre exterior (oameni, activitate, lumea externă) sau spre interior (idei, reflecție, lumea interioară).'],
+['S','N','Preluarea informației','Cum culegi informația: prin fapte concrete, detalii și realitatea prezentă, sau prin tipare, posibilități și sensuri de ansamblu.'],
+['T','F','Luarea deciziilor','Cum decizi: pe baza logicii obiective, a consecvenței și a cauzalității, sau a valorilor personale, a armoniei și a efectului asupra oamenilor.'],
+['J','P','Organizarea vieții','Cum te raportezi la structură: planuri, închidere și organizare, sau flexibilitate, spontaneitate și deschidere către opțiuni noi.']];
+const TIE={I:1,N:1,F:1,P:1};
+const FN={S:'Senzorialitate',N:'Intuiție',T:'Gândire',F:'Afectivitate'};
+const OPP={S:'N',N:'S',T:'F',F:'T',e:'i',i:'e'};
+const ADJ={e:'extravertită',i:'introvertită'};
+
+const D={
+ISTJ:['Inspectorul',11.6,'Serioși, responsabili și de încredere; se bazează pe fapte, reguli și experiența dovedită. Lucrează metodic, își respectă angajamentele și apreciază ordinea și tradiția.',['Management','Administrație','Juridic / poliție','Contabilitate']],
+ISFJ:['Protectorul',13.8,'Calzi, devotați și atenți la nevoile concrete ale celorlalți. Sunt conștiincioși, loiali, buni observatori ai detaliilor și preferă să ajute discret și constant.',['Educație','Sănătate','Religie']],
+INFJ:['Consilierul',1.5,'Profunzi, intuitivi și idealiști; caută sensul și armonia. Înțeleg bine motivațiile oamenilor și sunt determinați în a-și urma valorile și viziunea.',['Religie','Consiliere','Educație','Arte']],
+INTJ:['Strategul',2.1,'Independenți, analitici și orientați spre viitor. Construiesc viziuni și strategii de ansamblu, au standarde înalte și exigență față de ei înșiși și față de idei.',['Științific și tehnic','Computere','Legislație']],
+ISTP:['Meșteșugarul',5.4,'Practici, calmi și pragmatici; analizează cum funcționează lucrurile. Rezolvă rapid problemele concrete, sunt adaptabili și preferă acțiunea în locul discuțiilor lungi.',['Meșteșuguri','Domeniul etnic','Agricultură','Juridic / poliție','Militar']],
+ISFP:['Artistul',8.8,'Blânzi, sensibili și autentici; trăiesc în prezent și au un simț estetic dezvoltat. Evită conflictul, sunt flexibili și își exprimă valorile mai mult prin fapte decât prin cuvinte.',['Sănătate','Business','Juridic / poliție']],
+INFP:['Mediatorul',4.4,'Idealiști, empatici și creativi, ghidați de valori personale profunde. Caută autenticitatea, au imaginație bogată și sunt atrași de cauze care ajută oamenii.',['Consiliere','Literatură','Arte']],
+INTP:['Gânditorul',3.3,'Curioși, ingenioși și atrași de teorii și idei abstracte. Au simț critic dezvoltat, valorizează autonomia și le plac provocările intelectuale; pot neglija detaliile practice curente.',['Științific și tehnic']],
+ESTP:['Inițiatorul',4.3,'Energici, pragmatici și orientați spre acțiune. Reacționează rapid la situații, sunt negociatori buni, iubesc experiențele directe și rezolvarea problemelor „pe loc”.',['Marketing','Meșteșuguri','Business','Juridic / poliție','Tehnologie aplicată']],
+ESFP:['Animatorul',8.5,'Sociabili, spontani și plini de viață; aduc entuziasm și căldură în grup. Se adaptează ușor, sunt atenți la oameni și la concretul momentului.',['Sănătate','Educație','Training','Puericultură','Meșteșuguri']],
+ENFP:['Inspiratorul',8.1,'Entuziaști, creativi și plini de idei; văd posibilități peste tot și îi motivează pe ceilalți. Au nevoie de libertate, variație și de relații autentice.',['Consiliere','Educație','Religie','Arte']],
+ENTP:['Inovatorul',3.2,'Ingenioși, rapizi în gândire și iubitori de dezbateri. Descoperă conexiuni noi, testează limite și sunt atrași de provocări și de idei neconvenționale.',['Științe','Management','Tehnologie','Arte']],
+ESTJ:['Organizatorul',8.7,'Practici, decisivi și orientați spre rezultate; respectă regulile și structura. Organizează oameni și resurse eficient și iau în serios responsabilitățile.',['Management','Administrație','Juridic / poliție']],
+ESFJ:['Gazda',12.3,'Prietenoși, cooperanți și atenți la nevoile celor din jur. Creează armonie, respectă tradițiile și sunt foarte implicați în comunitatea lor.',['Educație','Sănătate','Religie']],
+ENFJ:['Mentorul',2.5,'Carismatici, empatici și motivanți; îi ajută pe alții să se dezvolte. Se orientează spre oameni, valori și cooperare, fiind lideri naturali ai grupurilor.',['Religie','Arte','Educație']],
+ENTJ:['Comandantul',1.8,'Lideri hotărâți, logici și strategici; organizează rapid planuri și oameni către obiective. Sunt direcți, ambițioși și eficienți în conducere.',['Management','Leadership']]};
+
+let S={sex:'',ans:{}};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+
+function buildSheet(){
+  const parts=[['Partea I (itemii 1–26)',1,26],['Partea a II-a (itemii 27–71): cuvântul care te atrage mai mult',27,71],['Partea a III-a (itemii 72–126)',72,126]];
+  $('sheet').innerHTML=parts.map(([t,a,b])=>{
+    let h='<div class="card"><h3>'+t+'</h3><div class="items">';
+    for(let n=a;n<=b;n++){
+      h+='<div class="it" id="it'+n+'"><b>'+n+'.</b>'+(MULTI[n]?'<span class="mut" title="Se pot marca cel mult două răspunsuri">(max. 2)</span>':'');
+      for(let k=0;k<(OPT[n]||2);k++){const c='abcde'[k];h+='<button data-n="'+n+'" data-c="'+c+'">'+c+'</button>'}
+      h+='</div>';
+    }
+    return h+'</div></div>';
+  }).join('');
+  $('sheet').onclick=e=>{const b=e.target.closest('button[data-n]');if(!b)return;
+    const n=b.dataset.n,c=b.dataset.c;
+    const cur=S.ans[n]||'';
+    if(MULTI[n]){
+      let nv;
+      if(cur.includes(c))nv=cur.replace(c,'');
+      else{nv=cur+c;if(nv.length>MULTI[n])nv=nv.slice(nv.length-MULTI[n])}
+      if(nv)S.ans[n]=nv;else delete S.ans[n];
+    }else{if(cur===c)delete S.ans[n];else S.ans[n]=c}
+    save();refresh()};
+}
+function refresh(){
+  document.querySelectorAll('#sheet button').forEach(b=>b.classList.toggle('on',(S.ans[b.dataset.n]||'').includes(b.dataset.c)));
+  for(let n=1;n<=126;n++)$('it'+n).classList.toggle('done',!!S.ans[n]);
+  $('sM').classList.toggle('pri',S.sex==='M');$('sF').classList.toggle('pri',S.sex==='F');
+  const c=Object.keys(S.ans).length;
+  $('prog').textContent='Completat: '+c+' din 126 itemi'+(126-c?' · '+(126-c)+' fără răspuns':'');
+}
+function sc(f){const k=K[f];let t=0;for(const n in S.ans){for(const c of S.ans[n]){t+=(k[n]&&k[n][c])||0}}return t}
+
+function calc(){
+  if(!S.sex){alert('Alege mai întâi sexul (Masculin / Feminin).');return}
+  const M=S.sex==='M';
+  const v={E:sc('E'),I:sc('I'),S:sc('S'),N:sc('N'),T:sc(M?'TM':'TF'),F:sc(M?'FM':'FF'),J:sc('J'),P:sc('P')};
+  let type='',ties=[],h='';
+  const max=Math.max(...Object.values(v),1);
+  h+='<h2>Scoruri pe cei 8 factori</h2><div class="card">';
+  DIMS.forEach(([x,y,t,d])=>{
+    let w;if(v[x]>v[y])w=x;else if(v[y]>v[x])w=y;else{w=TIE[x]?x:y;ties.push(x+'–'+y)}
+    type+=w;
+    h+='<div class="dim"><b>'+t+'</b> <span class="mut">('+x+' – '+y+')</span><div class="mut">'+d+'</div>';
+    [x,y].forEach(f=>{h+='<div class="bar'+(f===w?' win':'')+'"><span class="l">'+f+'</span><div class="tr"><div class="fi" style="width:'+(v[f]/max*100)+'%"></div></div><b>'+v[f]+'</b> <span class="mut">'+NAMES[f]+'</span></div>'});
+    h+='<div>Factor dominant: <b>'+w+' – '+NAMES[w]+'</b></div></div>';
+  });
+  if(ties.length)h+='<p class="warn">Egalitate la '+ties.join(', ')+': s-a aplicat convenția clasică de departajare (I, N, F, P). Rezultatul e la limită pentru aceste dimensiuni.</p>';
+  h+='</div>';
+  const un=126-Object.keys(S.ans).length;
+  if(un>12)h+='<p class="warn">Atenție: ai '+un+' itemi fără răspuns, rezultatul poate fi mai puțin fiabil.</p>';
+
+  // Funcții
+  const l=type.split(''),mid=[l[1],l[2]];
+  const extFn=l[3]==='J'?l[2]:l[1];
+  const other=extFn===l[1]?l[2]:l[1];
+  let dom,aux;
+  if(l[0]==='E'){dom=extFn+'e';aux=other+'i'}else{aux=extFn+'e';dom=other+'i'}
+  const op=f=>OPP[f[0]]+OPP[f[1]];
+  const ter=op(aux),inf=op(dom);
+  const stack=[dom,aux,ter,inf];
+  const full=f=>FN[f[0]]+' '+ADJ[f[1]];
+  h+='<h2>Tipul tău: <span class="big">'+type+'</span></h2>';
+  const d=D[type];
+  h+='<div class="card"><h3>'+d[0]+' <span class="mut">(~'+String(d[1]).replace('.',',')+'% din populația generală, SUA)</span></h3><p>'+d[2]+'</p>';
+  h+='<h3>Domenii profesionale potrivite</h3><div>'+d[3].map(x=>'<span class="tag">'+x+'</span>').join('')+'</div>';
+  h+='<p class="mut">Repere: I = profunzime (concentrare) · E = interese multiple · S = încredere în lucruri concrete · N = deschidere spre posibilități · T = logic și analitic · F = cald și empatic · J = organizat · P = adaptabil.</p></div>';
+
+  h+='<h2>Stiva ta de funcții: '+stack.map(s=>s[0]+s[1]).join(' – ')+'</h2><div class="card scroll"><table><tr><th>Poziție</th><th>Funcție</th><th>Semnificație</th></tr>'
+   +['Dominantă (1)','Auxiliară (2)','Terțiară (3)','Inferioară (4)'].map((p,i)=>'<tr><td>'+p+'</td><td><b>'+stack[i][0]+stack[i][1]+'</b></td><td>'+full(stack[i])+'</td></tr>').join('')+'</table>'
+   +'<p class="mut">Dominanta și auxiliara se activează spontan („vin natural”), fiind punctele forte. Terțiara și inferioara cer efort conștient și sunt „unghiul mort” care merită dezvoltat în timp.</p></div>';
+
+  h+='<h2>Algoritmul de determinare a funcțiilor</h2><div class="card">'
+  +'<h3>Pasul 1: funcția extravertită (J sau P)</h3><p>A patra literă indică ce literă din mijloc (S/N sau T/F) este orientată spre exterior. J: funcția de judecată (T sau F) este extravertită (Te / Fe). P: funcția de percepție (S sau N) este extravertită (Se / Ne).<br>'
+  +'<b>La tine:</b> '+l[3]+' → '+(l[3]==='J'?'Judecare':'Percepție')+' → <b>'+extFn+'e</b> este extravertită.</p>'
+  +'<h3>Pasul 2: funcția dominantă (E sau I)</h3><p>Prima literă arată dacă funcția extravertită este Dominantă sau Auxiliară. E: funcția extravertită este Dominantă, iar cealaltă literă din mijloc devine Auxiliară, introvertită. I: funcția extravertită este Auxiliară, iar cealaltă literă din mijloc devine Dominantă, introvertită.<br>'
+  +'<b>La tine:</b> '+l[0]+' → '+(l[0]==='E'?extFn+'e este Dominantă; '+other+' devine Auxiliară introvertită ('+other+'i)':extFn+'e este Auxiliară; '+other+' devine Dominantă introvertită ('+other+'i)')+'.</p>'
+  +'<h3>Pasul 3: funcțiile terțiară și inferioară</h3><p>Jumătatea de jos a stivei oglindește jumătatea de sus, cu perechile opuse T↔F, S↔N, e↔i. Terțiara = opusul Auxiliarei; Inferioara = opusul Dominantei.<br>'
+  +'<b>La tine:</b> opusul lui '+aux+' = <b>'+ter+'</b> (terțiară); opusul lui '+dom+' = <b>'+inf+'</b> (inferioară).</p>'
+  +'<p><b>Stiva finală: '+stack.join(' – ')+'</b></p>'
+  +'<p class="mut">Exemple: ENTP → Ne – Ti – Fe – Si · ISFJ → Si – Fe – Ti – Ne · INTJ → Ni – Te – Fi – Se.</p></div>';
+  h+='<p class="mut">Instrument orientativ, nu un diagnostic psihologic. Interpretarea unui profil complet se face cu un specialist.</p>';
+  $('res').innerHTML=h;
+  $('res').scrollIntoView({behavior:'smooth'});
+}
+$('sM').onclick=()=>{S.sex='M';save();refresh()};
+$('sF').onclick=()=>{S.sex='F';save();refresh()};
+$('calc').onclick=calc;
+$('clr').onclick=()=>{if(!confirm('Ștergi toate răspunsurile salvate?'))return;S={sex:'',ans:{}};try{localStorage.removeItem(KEY)}catch(e){}$('res').innerHTML='';refresh()};
+buildSheet();refresh();
+</script>
+</body>
+</html>
